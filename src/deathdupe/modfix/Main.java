@@ -27,8 +27,9 @@ public class Main extends JavaPlugin {
 		lis = new DFListener(this);
 		getServer().getPluginManager().registerEvents(lis, this);
 		getCommand("modfix").setExecutor(lis);
-		lis.LoadIDs();
 	}
+	
+	@Override
 	public void onDisable() {
 		lis = null;
 	}
