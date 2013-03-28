@@ -17,9 +17,6 @@
 
 package deathdupe.modfix;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.logging.Logger;
 
@@ -31,8 +28,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,19 +35,19 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 
 //notice: every fix will be in own listener soon;
 public class DFListener implements Listener, CommandExecutor {
 	private static final Logger log = Bukkit.getLogger();
 	private Main main;
-	private boolean enableVillagersFix = true;
-	private boolean enableBackPackFix = true;
+	private ModFixConfig config;
 	
 	
-	DFListener(Main main) {
+	DFListener(Main main, ModFixConfig config) {
 		this.main = main;
-		this.LoadConfig();
+		this.config = config;
 	}
 
 
@@ -62,7 +57,7 @@ public class DFListener implements Listener, CommandExecutor {
 	@EventHandler
 	public void VillagerIncClickEvent(InventoryClickEvent event)
 	{
-		if (enableVillagersFix) {
+		if (config.enableVillagersFix) {
 		if (event.getView().getTopInventory() != null &&  event.getView().getTopInventory().getType().equals(InventoryType.MERCHANT))
 			{
 				if (event.isShiftClick())
@@ -83,13 +78,12 @@ public class DFListener implements Listener, CommandExecutor {
 	
 	
 	//BackPack  Death fix
-	HashSet<Integer> BadIDs = new HashSet<Integer>();
 	@EventHandler
 	public void onPlayerD(PlayerDeathEvent event) {
-		if (enableBackPackFix) {
+		if (config.enableBackPackFix) {
 		Player p = event.getEntity();
 		if (p.getItemOnCursor().getType() != Material.AIR) {
-				if (BadIDs.contains(p.getItemInHand().getTypeId())) {
+				if (config.BadIDs.contains(p.getItemInHand().getTypeId())) {
 					//If this is null, then it means that we are dealing with backppacks... probably
 					if (p.getOpenInventory() == null) {
 						p.setItemOnCursor(new ItemStack(Material.AIR));
@@ -100,6 +94,23 @@ public class DFListener implements Listener, CommandExecutor {
 		}
 
 	}
+	
+	
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event)
+	{
+		if (config.checkmodlist) {
+		String player = event.getPlayer().getName();
+		HashSet<String> plcm = main.playersmods.get(player);
+		if (!(plcm.equals(config.AllowedModsList)))
+		{
+			event.getPlayer().kickPlayer(config.modscheckfailedmessage);
+		}
+		}
+			
+	}
+	
+	
 
 	@Override
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2,
@@ -108,7 +119,7 @@ public class DFListener implements Listener, CommandExecutor {
 		if (arg0 instanceof ConsoleCommandSender)
 		{
 			ConsoleCommandSender sender = (ConsoleCommandSender) arg0;
-			LoadConfig();
+			config.LoadConfig();
 			sender.sendMessage("[ModFix] Config reloaded");
 			return true;
 		}
@@ -116,20 +127,4 @@ public class DFListener implements Listener, CommandExecutor {
 	}
 	
 	
-	private void LoadConfig(){
-		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
-		enableBackPackFix = config.getBoolean("EnableBackPackFix",enableBackPackFix);
-		BadIDs = new HashSet<Integer>(config.getIntegerList("BadIDs"));
-		enableVillagersFix = config.getBoolean("EnableFillagersFix",enableVillagersFix);
-		config.set("EnableBackPackFix",enableBackPackFix);
-		config.set("BadIDs", new ArrayList<Integer>(BadIDs));
-		config.set("EnableFillagersFix",enableVillagersFix);
-		try {
-			config.save(new File("plugins/ModFix/config.yml"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 }
