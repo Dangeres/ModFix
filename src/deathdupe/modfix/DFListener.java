@@ -31,6 +31,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
@@ -47,7 +48,8 @@ public class DFListener implements Listener, CommandExecutor {
 	}
 
 	// Villagers fix
-	@EventHandler
+	// Restrict shift-click
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void VillagerIncClickEvent(InventoryClickEvent event) {
 		if (config.enableVillagersFix) {
 			if (event.getView().getTopInventory() != null
@@ -70,12 +72,13 @@ public class DFListener implements Listener, CommandExecutor {
 	}
 
 	// BackPack Death fix
+	//Closing inventory when player is about to die
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onPlayerD(EntityDamageEvent event) {
+	public void onPlayerD(PlayerDeathEvent event) {
 		if (config.enableBackPackFix) {
 			if (event.getEntity() instanceof Player) {
 				Player p = (Player) event.getEntity();
-				if (p.getHealth() - event.getDamage() <= 0) {
+				{
 					p.closeInventory();
 				}
 			}
