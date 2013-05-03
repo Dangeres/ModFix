@@ -35,6 +35,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 //notice: every fix will be in own listener soon;
 public class DFListener implements Listener, CommandExecutor {
@@ -85,6 +87,21 @@ public class DFListener implements Listener, CommandExecutor {
 		}
 
 	}
+	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onPlayerExit(PlayerQuitEvent event) {
+		if (config.enableBackPackFix) {
+					event.getPlayer().closeInventory();
+			}
+	}
+	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onPlayerKick(PlayerKickEvent event) {
+		if (config.enableBackPackFix) {
+					event.getPlayer().closeInventory();
+			}
+	}
+
 
 	@Override
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2,

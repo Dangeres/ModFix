@@ -1,6 +1,6 @@
 name: ModFix
 main: deathdupe.modfix.Main
-version: 0.2
+version: 1.0
 author: Shevchik
 load: STARTUP
 commands:
