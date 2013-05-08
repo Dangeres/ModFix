@@ -34,13 +34,16 @@ public class ModFixConfig {
 	
 	protected boolean enableVillagersFix = true;
 	protected boolean enableBackPackFix = true;
+	protected boolean enableChunkUnloadFix = true;
 	
 	public void LoadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
 		enableBackPackFix = config.getBoolean("EnableBackPackFix",enableBackPackFix);
 		enableVillagersFix = config.getBoolean("EnableVillagersFix",enableVillagersFix);
+		enableChunkUnloadFix = config.getBoolean("EnableChunkUnloadFix",enableChunkUnloadFix);
 		config.set("EnableBackPackFix",enableBackPackFix);
 		config.set("EnableVillagersFix",enableVillagersFix);
+		config.set("EnableChunkUnloadFix",enableChunkUnloadFix);
 		try {
 			config.save(new File("plugins/ModFix/config.yml"));
 		} catch (IOException e) {

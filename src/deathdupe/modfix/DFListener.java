@@ -17,7 +17,7 @@
 
 package deathdupe.modfix;
 
-import java.util.logging.Logger;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,17 +30,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityEvent;
+import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 //notice: every fix will be in own listener soon;
 public class DFListener implements Listener, CommandExecutor {
-	private static final Logger log = Bukkit.getLogger();
 	private Main main;
 	private ModFixConfig config;
 
@@ -49,7 +52,7 @@ public class DFListener implements Listener, CommandExecutor {
 		this.config = config;
 	}
 
-	// Villagers fix
+	// Villagers fix start
 	// Restrict shift-click
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void VillagerIncClickEvent(InventoryClickEvent event) {
@@ -72,9 +75,11 @@ public class DFListener implements Listener, CommandExecutor {
 			}
 		}
 	}
+	// Villagers fix end
+	
 
-	// BackPack Death fix
-	//Closing inventory when player is about to die
+
+	// BackPack fix start
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerD(PlayerDeathEvent event) {
 		if (config.enableBackPackFix) {
@@ -115,5 +120,32 @@ public class DFListener implements Listener, CommandExecutor {
 		}
 		return false;
 	}
+	// BackPack fix end
 
+	
+	
+	// ChunkUnloadInventoryFix start
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onPlayerChangedChunkEvent(PlayerMoveEvent e)
+	{
+		if (config.enableChunkUnloadFix)
+		{
+			if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
+			{
+				e.getPlayer().closeInventory();
+			}
+		}
+	}
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onTp(PlayerTeleportEvent e)
+	{
+		if (config.enableChunkUnloadFix)
+		{
+			if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
+			{
+				e.getPlayer().closeInventory();
+			}
+		}
+	}
+	
 }
