@@ -181,10 +181,10 @@ public class DFListener implements Listener, CommandExecutor {
 
 				// There is aready an owner of the blocks somewhere, let's check where it is
 				OfflinePlayer oldpl = Bukkit.getOfflinePlayer(protectblocks.get(interact));
-				if (!oldpl.isOnline()) 	{protectblocks.remove(interact); return;}
+				if (!oldpl.isOnline()) 	{protectblocks.remove(interact); protectblocks.put(interact, pl.getName()); return;}
 				Location plloc = oldpl.getPlayer().getLocation();
-				if (!plloc.getWorld().equals(interact.getLocation().getWorld())) {protectblocks.remove(interact); return;}
-				if (Math.abs(plloc.getBlockX() - interact.getLocation().getBlockX()) >= 10 && Math.abs(plloc.getBlockY() - interact.getLocation().getBlockY()) >= 10 && Math.abs(plloc.getBlockZ() - interact.getLocation().getBlockZ()) >= 10) {protectblocks.remove(interact); return;}
+				if (!plloc.getWorld().equals(interact.getLocation().getWorld())) {protectblocks.remove(interact); protectblocks.put(interact, pl.getName()); return;}
+				if (Math.abs(plloc.getBlockX() - interact.getLocation().getBlockX()) >= 10 && Math.abs(plloc.getBlockY() - interact.getLocation().getBlockY()) >= 10 && Math.abs(plloc.getBlockZ() - interact.getLocation().getBlockZ()) >= 10) {protectblocks.remove(interact);protectblocks.put(interact, pl.getName()); return;}
 				//We reached here, well, sorry player, but you can't open this for now.
 				pl.sendMessage(ChatColor.RED + "Вы не можете открыть этот стол, по крайней мере сейчас");
 				e.setCancelled(true);
