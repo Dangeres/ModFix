@@ -15,7 +15,7 @@
  *
  */
 
-package deathdupe.modfix;
+package modfix;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +26,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ModFixConfig {
+	@SuppressWarnings("unused")
 	private Main main;
 	ModFixConfig(Main main)
 	{

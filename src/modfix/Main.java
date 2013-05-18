@@ -15,24 +15,23 @@
 *
 */
 
-package deathdupe.modfix;
-
-import java.util.HashMap;
-import java.util.HashSet;
+package modfix;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
-
+//warning: this plugin requires ProtocolLib to run
 public class Main extends JavaPlugin {
 
-	
-	public HashMap<String, HashSet<String> > playersmods = new HashMap<String, HashSet<String>>();
-		
-	private DFListener lis;
 	private ModFixConfig config;
+	
+	private MFCommandListener commandl;
+	private MFBagFixListener bagl;
+	private MFTableFixListener tablel;
+	private MFVillagerFixListener villagerl;
+	private MFChunkFixListener chunkl;
 	
 	public ProtocolManager protocolManager = null;
 	@Override
@@ -42,17 +41,32 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
+		//init config
 		config = new ModFixConfig(this);
-		lis = new DFListener(this,config);
-		getServer().getPluginManager().registerEvents(lis, this);
-		getCommand("modfix").setExecutor(lis);
-		if (protocolManager != null) {lis.iniProtocolLiblisteners();}
+		//init command listener
+		commandl = new MFCommandListener(this,config);
+		getCommand("modfix").setExecutor(commandl);
+		//init bag bugfix listener
+		bagl = new MFBagFixListener(this,config);
+		getServer().getPluginManager().registerEvents(bagl, this);
+		//init table bugfix listener
+		tablel = new MFTableFixListener(this,config);
+		getServer().getPluginManager().registerEvents(tablel, this);
+		//init villager bugfix listener
+		villagerl = new MFVillagerFixListener(this,config);
+		getServer().getPluginManager().registerEvents(villagerl, this);
+        //init chunk bugfix listener
+		chunkl = new MFChunkFixListener(this,config);
+		getServer().getPluginManager().registerEvents(chunkl, this);
 	}
 	
 	@Override
 	public void onDisable() {
-		lis = null;
+		//null variables for folks reloading plugins
 		config = null;
+		commandl = null;
+		tablel = null;
+		villagerl = null;
 	}
 	
 	

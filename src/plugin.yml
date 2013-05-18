@@ -1,6 +1,6 @@
 name: ModFix
-main: deathdupe.modfix.Main
-version: 1.1
+main: modfix.Main
+version: 2.0
 author: Shevchik
 softdepend: [ProtocolLib]
 load: STARTUP
