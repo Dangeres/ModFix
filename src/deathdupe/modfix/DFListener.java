@@ -186,7 +186,7 @@ public class DFListener implements Listener, CommandExecutor {
 				if (!plloc.getWorld().equals(interact.getLocation().getWorld())) {protectblocks.remove(interact); return;}
 				if (Math.abs(plloc.getBlockX() - interact.getLocation().getBlockX()) >= 10 && Math.abs(plloc.getBlockY() - interact.getLocation().getBlockY()) >= 10 && Math.abs(plloc.getBlockZ() - interact.getLocation().getBlockZ()) >= 10) {protectblocks.remove(interact); return;}
 				//We reached here, well, sorry player, but you can't open this for now.
-				oldpl.getPlayer().sendMessage(ChatColor.RED + "Вы не можете открыть этот стол, по крайней мере сейчас");
+				pl.sendMessage(ChatColor.RED + "Вы не можете открыть этот стол, по крайней мере сейчас");
 				e.setCancelled(true);
 			}
 		}
