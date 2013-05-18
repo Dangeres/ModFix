@@ -22,6 +22,9 @@ import java.util.HashSet;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+
 
 public class Main extends JavaPlugin {
 
@@ -30,12 +33,20 @@ public class Main extends JavaPlugin {
 		
 	private DFListener lis;
 	private ModFixConfig config;
+	
+	public ProtocolManager protocolManager = null;
+	@Override
+	public void onLoad() {
+	    protocolManager = ProtocolLibrary.getProtocolManager();
+	}
+	
 	@Override
 	public void onEnable() {
 		config = new ModFixConfig(this);
 		lis = new DFListener(this,config);
 		getServer().getPluginManager().registerEvents(lis, this);
 		getCommand("modfix").setExecutor(lis);
+		if (protocolManager != null) {lis.iniProtocolLiblisteners();}
 	}
 	
 	@Override

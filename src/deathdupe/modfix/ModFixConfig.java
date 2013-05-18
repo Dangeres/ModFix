@@ -36,6 +36,7 @@ public class ModFixConfig {
 	
 	protected boolean enableVillagersFix = true;
 	protected boolean enableBackPackFix = true;
+	protected HashSet<Integer> BackPacksIDs = new HashSet<Integer>();
 	protected boolean enableChunkUnloadFix = true;
 	protected boolean enableTablesFix = true;
 	protected HashSet<String> TablesIDs= new HashSet<String>();
@@ -43,11 +44,13 @@ public class ModFixConfig {
 	public void LoadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
 		enableBackPackFix = config.getBoolean("EnableBackPackFix",enableBackPackFix);
+		BackPacksIDs = new HashSet<Integer>(config.getIntegerList("enableBackPackFixIDs"));
 		enableVillagersFix = config.getBoolean("EnableVillagersFix",enableVillagersFix);
 		enableChunkUnloadFix = config.getBoolean("EnableChunkUnloadFix",enableChunkUnloadFix);
 		enableTablesFix = config.getBoolean("enableTablesFix",enableTablesFix);
 		TablesIDs = new HashSet<String>(config.getStringList("enableTablesFixIDs"));
 		config.set("EnableBackPackFix",enableBackPackFix);
+		config.set("enableBackPackFixIDs",new ArrayList<Integer>(BackPacksIDs));
 		config.set("EnableVillagersFix",enableVillagersFix);
 		config.set("EnableChunkUnloadFix",enableChunkUnloadFix);
 		config.set("enableTablesFix",enableTablesFix);

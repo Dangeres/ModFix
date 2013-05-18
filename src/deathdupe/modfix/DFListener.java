@@ -44,6 +44,12 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+import com.comphenix.protocol.Packets;
+import com.comphenix.protocol.events.ConnectionSide;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
+
 //notice: every fix will be in own listener soon;
 public class DFListener implements Listener, CommandExecutor {
 	private Main main;
@@ -191,7 +197,7 @@ public class DFListener implements Listener, CommandExecutor {
 			}
 		}
 	}
-	//CraftingTablesFix end
+
 	
 	
 	private String getIDstring(Block bl)
@@ -206,9 +212,37 @@ public class DFListener implements Listener, CommandExecutor {
 		}
 		return blstring;
 	}
+	//CraftingTablesFix end
+	
+	public void iniProtocolLiblisteners() {
+		initBagBugFixListener();
+	}
 	
 	
-	
+	private void initBagBugFixListener()
+	{
+		main.protocolManager.addPacketListener(
+				  new PacketAdapter(main, ConnectionSide.CLIENT_SIDE, 
+				  ListenerPriority.HIGHEST, Packets.Client.WINDOW_CLICK) {
+				    @SuppressWarnings("deprecation")
+					@Override
+				    public void onPacketReceiving(PacketEvent e) {
+				    	if (!config.enableBackPackFix) {return;}
+				    	if (!(e.getPacketID() == Packets.Client.WINDOW_CLICK)) {return;}
+				    	//check click type , 2 ==  1..9 buttons
+				    	{if (e.getPacket().getIntegers().getValues().get(3) == 2)
+				    		//if item in hand is one of the bad ids block action
+				    		if (config.BackPacksIDs.contains(e.getPlayer().getItemInHand().getTypeId())) {
+				    			e.setCancelled(true);
+				    			e.getPlayer().closeInventory();
+				    			e.getPlayer().updateInventory();
+				    			e.getPlayer().sendMessage(ChatColor.RED+"Кнопками 1-9 нельзя пользоваться в этом инвентаре");
+				    		}
+				 	   	}
+
+				    }
+				});
+	}
 	
 }
 
