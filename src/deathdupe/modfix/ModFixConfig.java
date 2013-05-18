@@ -19,6 +19,8 @@ package deathdupe.modfix;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -35,15 +37,21 @@ public class ModFixConfig {
 	protected boolean enableVillagersFix = true;
 	protected boolean enableBackPackFix = true;
 	protected boolean enableChunkUnloadFix = true;
+	protected boolean enableTablesFix = true;
+	protected HashSet<String> TablesIDs= new HashSet<String>();
 	
 	public void LoadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
 		enableBackPackFix = config.getBoolean("EnableBackPackFix",enableBackPackFix);
 		enableVillagersFix = config.getBoolean("EnableVillagersFix",enableVillagersFix);
 		enableChunkUnloadFix = config.getBoolean("EnableChunkUnloadFix",enableChunkUnloadFix);
+		enableTablesFix = config.getBoolean("enableTablesFix",enableTablesFix);
+		TablesIDs = new HashSet<String>(config.getStringList("enableTablesFix.IDs"));
 		config.set("EnableBackPackFix",enableBackPackFix);
 		config.set("EnableVillagersFix",enableVillagersFix);
 		config.set("EnableChunkUnloadFix",enableChunkUnloadFix);
+		config.set("enableTablesFix",enableTablesFix);
+		config.set("enableTablesFix.IDs",new ArrayList<String>(TablesIDs));
 		try {
 			config.save(new File("plugins/ModFix/config.yml"));
 		} catch (IOException e) {

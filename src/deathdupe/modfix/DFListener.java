@@ -21,7 +21,10 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,13 +33,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityEvent;
-import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -52,6 +54,21 @@ public class DFListener implements Listener, CommandExecutor {
 		this.config = config;
 	}
 
+
+	@Override
+	public boolean onCommand(CommandSender arg0, Command arg1, String arg2,
+			String[] arg3) {
+		// TODO Auto-generated method stub
+		if (arg0 instanceof ConsoleCommandSender) {
+			ConsoleCommandSender sender = (ConsoleCommandSender) arg0;
+			config.LoadConfig();
+			sender.sendMessage("[ModFix] Config reloaded");
+			return true;
+		}
+		return false;
+	}
+	
+	
 	// Villagers fix start
 	// Restrict shift-click
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -106,21 +123,10 @@ public class DFListener implements Listener, CommandExecutor {
 					event.getPlayer().closeInventory();
 			}
 	}
-
-
-	@Override
-	public boolean onCommand(CommandSender arg0, Command arg1, String arg2,
-			String[] arg3) {
-		// TODO Auto-generated method stub
-		if (arg0 instanceof ConsoleCommandSender) {
-			ConsoleCommandSender sender = (ConsoleCommandSender) arg0;
-			config.LoadConfig();
-			sender.sendMessage("[ModFix] Config reloaded");
-			return true;
-		}
-		return false;
-	}
 	// BackPack fix end
+
+
+
 
 	
 	
@@ -147,5 +153,63 @@ public class DFListener implements Listener, CommandExecutor {
 			}
 		}
 	}
+	//ChunkUnloadInventoryFix end
+	
+	
+	//CraftingTablesFix begin
+	private HashMap<Block, String> protectblocks =new HashMap<Block, String>();
+	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void OnPlayerIneractTable(PlayerInteractEvent e)
+	{
+		if (!config.enableTablesFix) {return;}
+		if (e.getAction() == Action.RIGHT_CLICK_BLOCK)
+		{
+			Player pl = e.getPlayer();
+			Block interact = e.getClickedBlock();
+			String checkid = getIDstring(interact);
+			if (config.TablesIDs.contains(checkid))
+			{
+				if (protectblocks.get(interact) == null)
+				{ //Put block to list of protected blocks
+					protectblocks.put(interact, pl.getName());
+					return;
+				}
+				//If it's the same player let him open this
+				if (pl.getName().equals(protectblocks.get(interact))) {return;}
+
+
+				// There is aready an owner of the blocks somewhere, let's check where it is
+				OfflinePlayer oldpl = Bukkit.getOfflinePlayer(protectblocks.get(interact));
+				if (!oldpl.isOnline()) 	{protectblocks.remove(interact); return;}
+				Location plloc = oldpl.getPlayer().getLocation();
+				if (!plloc.getWorld().equals(interact.getLocation().getWorld())) {protectblocks.remove(interact); return;}
+				if (Math.abs(plloc.getBlockX() - interact.getLocation().getBlockX()) >= 10 && Math.abs(plloc.getBlockY() - interact.getLocation().getBlockY()) >= 10 && Math.abs(plloc.getBlockZ() - interact.getLocation().getBlockZ()) >= 10) {protectblocks.remove(interact); return;}
+				//We reached here, well, sorry player, but you can't open this for now.
+				oldpl.getPlayer().sendMessage(ChatColor.RED + "Вы не можете открыть этот стол, по крайней мере сейчас");
+				e.setCancelled(true);
+			}
+		}
+	}
+	//CraftingTablesFix end
+	
+	
+	private String getIDstring(Block bl)
+	{
+		String blstring = null;
+		if (bl.getData() !=0) {
+			blstring = bl.getTypeId()+":"+bl.getData();
+		}
+		else 
+		{
+			blstring = String.valueOf(bl.getTypeId());
+		}
+		return blstring;
+	}
+	
+	
+	
 	
 }
+
+
