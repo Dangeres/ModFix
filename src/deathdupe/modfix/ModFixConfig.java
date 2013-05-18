@@ -46,12 +46,12 @@ public class ModFixConfig {
 		enableVillagersFix = config.getBoolean("EnableVillagersFix",enableVillagersFix);
 		enableChunkUnloadFix = config.getBoolean("EnableChunkUnloadFix",enableChunkUnloadFix);
 		enableTablesFix = config.getBoolean("enableTablesFix",enableTablesFix);
-		TablesIDs = new HashSet<String>(config.getStringList("enableTablesFix.IDs"));
+		TablesIDs = new HashSet<String>(config.getStringList("enableTablesFixIDs"));
 		config.set("EnableBackPackFix",enableBackPackFix);
 		config.set("EnableVillagersFix",enableVillagersFix);
 		config.set("EnableChunkUnloadFix",enableChunkUnloadFix);
 		config.set("enableTablesFix",enableTablesFix);
-		config.set("enableTablesFix.IDs",new ArrayList<String>(TablesIDs));
+		config.set("enableTablesFixIDs",new ArrayList<String>(TablesIDs));
 		try {
 			config.save(new File("plugins/ModFix/config.yml"));
 		} catch (IOException e) {
