@@ -31,7 +31,6 @@ public class ModFixConfig {
 	ModFixConfig(Main main)
 	{
 		this.main = main;
-		loadConfig();
 	}
 	
 	

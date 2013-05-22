@@ -37,26 +37,32 @@ public class MFChunkFixListener implements Listener {
 	
 	//close inventory if player changed chunk while was moving
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onPlayerChangedChunkEvent(PlayerMoveEvent e)
+	public void onPlayerChangedChunkByMoveEvent(PlayerMoveEvent e)
 	{
 		if (config.enableChunkUnloadFix)
 		{
 			if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
 			{
-				e.getPlayer().closeInventory();
+				if (!(e.getPlayer().getName().contains("[") || e.getPlayer().getName().contains("]")))
+				{
+					e.getPlayer().closeInventory();
+				}
 			}
 		}
 	}
 	
 	//close inventory if palyer teleported form chunk
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onTp(PlayerTeleportEvent e)
+	public void onPlayerChangedChunkByTeleport(PlayerTeleportEvent e)
 	{
 		if (config.enableChunkUnloadFix)
 		{
 			if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
 			{
-				e.getPlayer().closeInventory();
+				if (!(e.getPlayer().getName().contains("[") || e.getPlayer().getName().contains("]")))
+				{
+					e.getPlayer().closeInventory();
+				}
 			}
 		}
 	}

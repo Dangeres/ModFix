@@ -135,6 +135,8 @@ public class MFCommandListener implements  CommandExecutor {
 		{
 		Player pl = (Player) sender;
 		config.BackPacks19IDs.add(pl.getItemInHand().getTypeId());
+		config.saveConfig();
+		pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
 		}
 		else
 		{
@@ -151,6 +153,7 @@ public class MFCommandListener implements  CommandExecutor {
 		if (pl.getItemInHand().getDurability() !=0) {add += ":"+pl.getItemInHand().getDurability();}
 		config.IntTablesIDs.add(add);
 		config.saveConfig();
+		pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
 		}
 		else
 		{

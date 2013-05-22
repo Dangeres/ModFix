@@ -17,8 +17,6 @@
 
 package modfix;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -47,6 +45,7 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		//init config
 		config = new ModFixConfig(this);
+		config.loadConfig();
 		//init command listener
 		commandl = new MFCommandListener(this,config);
 		getCommand("modfix").setExecutor(commandl);
@@ -62,16 +61,13 @@ public class Main extends JavaPlugin {
         //init chunk bugfix listener
 		chunkl = new MFChunkFixListener(this,config);
 		getServer().getPluginManager().registerEvents(chunkl, this);
-		//init test class used for  testing
-		//testl = new TestEventClass(this,config);
-		//getServer().getPluginManager().registerEvents(testl, this);
-		//testl.initTestListener();
 		
 	}
 	
 	@Override
 	public void onDisable() {
 		//null variables for folks reloading plugins
+		config.saveConfig();
 		config = null;
 		commandl = null;
 		tablel = null;
