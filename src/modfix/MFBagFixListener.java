@@ -17,7 +17,6 @@
 
 package modfix;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -40,7 +39,7 @@ public class MFBagFixListener implements Listener {
 	MFBagFixListener(Main main, ModFixConfig config) {
 		this.main = main;
 		this.config = config;
-		initBagBugFixListener();
+		initBag19BugFixListener();
 	}
 	
 	//close inventory on death
@@ -74,7 +73,7 @@ public class MFBagFixListener implements Listener {
 	}
 	
 	//restrict using 1-9 buttons in modded inventories
-	private void initBagBugFixListener()
+	private void initBag19BugFixListener()
 	{
 		main.protocolManager.addPacketListener(
 				  new PacketAdapter(main, ConnectionSide.CLIENT_SIDE, 
@@ -84,15 +83,20 @@ public class MFBagFixListener implements Listener {
 				    public void onPacketReceiving(PacketEvent e) {
 				    	if (!config.enableBackPackFix) {return;}
 				    	if (!(e.getPacketID() == Packets.Client.WINDOW_CLICK)) {return;}
-				    	//check click type , 2 ==  1..9 buttons
-				    	{if (e.getPacket().getIntegers().getValues().get(3) == 2)
-				    		//if item in hand is one of the bad ids block action
-				    		if (config.BackPacksIDs.contains(e.getPlayer().getItemInHand().getTypeId())) {
-				    			e.setCancelled(true);
-				    			e.getPlayer().closeInventory();
-				    			e.getPlayer().updateInventory();
-				    			e.getPlayer().sendMessage(ChatColor.RED+"Кнопками 1-9 нельзя пользоваться в этом инвентаре");
-				    		}
+				    	Player pl = e.getPlayer();
+			    		//if item in hand is one of the bad ids - check buttons
+			    		if (config.BackPacks19IDs.contains(pl.getItemInHand().getTypeId())) {
+			    			{//check click type , 2 ==  1..9 buttons (e.getPacket().getIntegers().getValues().get(3) - action type)
+			    				if (e.getPacket().getIntegers().getValues().get(3) == 2)
+			    				{//check to which slot we want to move item (if to bag slot - block action)
+			    				//e.getPacket().getIntegers().getValues().get(2) - slot to move item which
+			    					if (pl.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
+			    					{
+					    				e.setCancelled(true);
+						    			e.getPlayer().updateInventory();
+			    					}
+			    				}
+			    			}
 				 	   	}
 
 				    }

@@ -31,31 +31,38 @@ public class ModFixConfig {
 	ModFixConfig(Main main)
 	{
 		this.main = main;
-		LoadConfig();
+		loadConfig();
 	}
 	
 	
 	protected boolean enableVillagersFix = true;
 	protected boolean enableBackPackFix = true;
-	protected HashSet<Integer> BackPacksIDs = new HashSet<Integer>();
+	protected HashSet<Integer> BackPacks19IDs = new HashSet<Integer>();
 	protected boolean enableChunkUnloadFix = true;
 	protected boolean enableTablesFix = true;
-	protected HashSet<String> TablesIDs= new HashSet<String>();
+	protected HashSet<String> IntTablesIDs= new HashSet<String>();
 	
-	public void LoadConfig(){
+	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
-		enableBackPackFix = config.getBoolean("EnableBackPackFix",enableBackPackFix);
-		BackPacksIDs = new HashSet<Integer>(config.getIntegerList("enableBackPackFixIDs"));
-		enableVillagersFix = config.getBoolean("EnableVillagersFix",enableVillagersFix);
-		enableChunkUnloadFix = config.getBoolean("EnableChunkUnloadFix",enableChunkUnloadFix);
-		enableTablesFix = config.getBoolean("enableTablesFix",enableTablesFix);
-		TablesIDs = new HashSet<String>(config.getStringList("enableTablesFixIDs"));
-		config.set("EnableBackPackFix",enableBackPackFix);
-		config.set("enableBackPackFixIDs",new ArrayList<Integer>(BackPacksIDs));
-		config.set("EnableVillagersFix",enableVillagersFix);
-		config.set("EnableChunkUnloadFix",enableChunkUnloadFix);
-		config.set("enableTablesFix",enableTablesFix);
-		config.set("enableTablesFixIDs",new ArrayList<String>(TablesIDs));
+		enableBackPackFix = config.getBoolean("BackPackFix.enable",enableBackPackFix);
+		BackPacks19IDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.19BlockIDs"));
+		enableVillagersFix = config.getBoolean("VillagersFix.enable",enableVillagersFix);
+		enableChunkUnloadFix = config.getBoolean("ChunkUnloadFix.enable",enableChunkUnloadFix);
+		enableTablesFix = config.getBoolean("TablesFix.enable",enableTablesFix);
+		IntTablesIDs = new HashSet<String>(config.getStringList("TablesFix.InteractBlockIDs"));
+
+		saveConfig();
+	}
+	
+	public void saveConfig()
+	{
+		FileConfiguration config = new YamlConfiguration();
+		config.set("BackPackFix.enable",enableBackPackFix);
+		config.set("BackPackFix.19BlockIDs",new ArrayList<Integer>(BackPacks19IDs));
+		config.set("VillagersFix.enable",enableVillagersFix);
+		config.set("ChunkUnloadFix.enable",enableChunkUnloadFix);
+		config.set("TablesFix.enable",enableTablesFix);
+		config.set("TablesFix.InteractBlockIDs",new ArrayList<String>(IntTablesIDs));
 		try {
 			config.save(new File("plugins/ModFix/config.yml"));
 		} catch (IOException e) {

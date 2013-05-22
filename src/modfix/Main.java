@@ -17,6 +17,8 @@
 
 package modfix;
 
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -32,6 +34,8 @@ public class Main extends JavaPlugin {
 	private MFTableFixListener tablel;
 	private MFVillagerFixListener villagerl;
 	private MFChunkFixListener chunkl;
+	
+	//private TestEventClass testl;
 	
 	public ProtocolManager protocolManager = null;
 	@Override
@@ -58,6 +62,11 @@ public class Main extends JavaPlugin {
         //init chunk bugfix listener
 		chunkl = new MFChunkFixListener(this,config);
 		getServer().getPluginManager().registerEvents(chunkl, this);
+		//init test class used for  testing
+		//testl = new TestEventClass(this,config);
+		//getServer().getPluginManager().registerEvents(testl, this);
+		//testl.initTestListener();
+		
 	}
 	
 	@Override

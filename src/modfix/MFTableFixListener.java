@@ -19,60 +19,63 @@ package modfix;
 
 import java.util.HashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+
+import com.comphenix.protocol.Packets;
+import com.comphenix.protocol.events.ConnectionSide;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
 
 //CraftingTablesFix
 public class MFTableFixListener implements Listener {
 
-	@SuppressWarnings("unused")
 	private Main main;
 	private ModFixConfig config;
 	
 	MFTableFixListener(Main main, ModFixConfig config) {
 		this.main = main;
 		this.config = config;
+		initCloseInventoryFixListener();
 	}
 	
 	
 	private HashMap<Block, String> protectblocks = new HashMap<Block, String>();
+	private HashMap<String, Block> backreference = new HashMap<String, Block>();
 	
 	//allow only one player to interact with table at a time
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void OnPlayerIneractTable(PlayerInteractEvent e)
 	{
 		if (!config.enableTablesFix) {return;}
+		
+		
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
 			Player pl = e.getPlayer();
-			Block interact = e.getClickedBlock();
-			String checkid = getIDstring(interact);
-			if (config.TablesIDs.contains(checkid))
+			Block binteract = e.getClickedBlock();
+			String checkid = getIDstring(binteract);
+			if (config.IntTablesIDs.contains(checkid))
 			{
-				if (protectblocks.get(interact) == null)
-				{ //Put block to list of protected blocks
-					protectblocks.put(interact, pl.getName());
+				if (protectblocks.get(binteract) == null)
+				{//Put block to list of protected blocks
+					protectblocks.put(binteract, pl.getName());
+					backreference.put(pl.getName(), binteract);
 					return;
 				}
-				//If it's the same player let him open this
-				if (pl.getName().equals(protectblocks.get(interact))) {return;}
+				//If it's the same player let him open this (in case we lost something and block is still protected (this is really bad if this happened))
+				if (pl.getName().equals(protectblocks.get(binteract))) {return;}
 
-
-				// There is aready an owner of the blocks somewhere, let's check where it is
-				OfflinePlayer oldpl = Bukkit.getOfflinePlayer(protectblocks.get(interact));
-				if (!oldpl.isOnline()) 	{protectblocks.remove(interact); protectblocks.put(interact, pl.getName()); return;}
-				Location plloc = oldpl.getPlayer().getLocation();
-				if (!plloc.getWorld().equals(interact.getLocation().getWorld())) {protectblocks.remove(interact); protectblocks.put(interact, pl.getName()); return;}
-				if (Math.abs(plloc.getBlockX() - interact.getLocation().getBlockX()) > 16 || Math.abs(plloc.getBlockY() - interact.getLocation().getBlockY()) > 16) {protectblocks.remove(interact);protectblocks.put(interact, pl.getName()); return;}
 				//We reached here, well, sorry player, but you can't open this for now.
 				pl.sendMessage(ChatColor.RED + "Вы не можете открыть этот стол, по крайней мере сейчас");
 				e.setCancelled(true);
@@ -80,16 +83,64 @@ public class MFTableFixListener implements Listener {
 		}
 	}
 	
+	
+
+	private void initCloseInventoryFixListener()
+	{//remove block from hashmap on inventory close, just InventoryCloseEvent is not enough, not every mod fires it, so we will use packets.
+		main.protocolManager.addPacketListener(
+				  new PacketAdapter(main, ConnectionSide.CLIENT_SIDE, 
+				  ListenerPriority.HIGHEST, Packets.Client.CLOSE_WINDOW) {
+					@Override
+				    public void onPacketReceiving(PacketEvent e) {
+						String plname = e.getPlayer().getName();
+					if (backreference.containsKey(plname))
+						{//gotcha, you closed table inventory
+						    protectblocks.remove(backreference.get(plname));
+						    backreference.remove(plname);
+						}
+				    }
+				});
+	}
+	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onBlockBreak(BlockBreakEvent e)
+	{//Player can break opened block and then won't trigger inventory closing
+		Block br = e.getBlock();
+		if (protectblocks.containsKey(br))
+		{
+			backreference.remove(protectblocks.get(br));
+			protectblocks.remove(br);
+		}
+	}
+	
+	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onPlayerQuit(PlayerQuitEvent e)
+	{//player can quit without closing table inventory, let's check it
+		String plname = e.getPlayer().getName();
+		if (backreference.containsKey(plname))
+		{
+		    protectblocks.remove(backreference.get(plname));
+		    backreference.remove(plname);
+		}
+	}
+	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onPlayerKick(PlayerKickEvent e)
+	{//player can be kicked without closing table inventory, let's check it
+		String plname = e.getPlayer().getName();
+		if (backreference.containsKey(plname))
+		{
+		    protectblocks.remove(backreference.get(plname));
+		    backreference.remove(plname);
+		}
+	}
+	
+	
 	private String getIDstring(Block bl)
 	{
-		String blstring = null;
-		if (bl.getData() !=0) {
-			blstring = bl.getTypeId()+":"+bl.getData();
-		}
-		else 
-		{
-			blstring = String.valueOf(bl.getTypeId());
-		}
+		String blstring = String.valueOf(bl.getTypeId());
+		if (bl.getData() !=0) {blstring += ":"+bl.getData();}
 		return blstring;
 	}
 }
