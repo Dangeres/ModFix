@@ -46,7 +46,6 @@ public class MFExpFixListener implements Listener {
 			Player pl = e.getPlayer();
 			Block binteract = e.getClickedBlock();
 			String checkid = getIDstring(binteract);
-			System.out.println(checkid);
 			if (config.Furn3slotIDs.contains(checkid))
 			{
 				plinvmode.put(pl.getName(), 1);
@@ -63,19 +62,14 @@ public class MFExpFixListener implements Listener {
 	{//player can quit without closing furnace inventory, let's check it
 		String plname = e.getPlayer().getName();
 		if (plinvmode.containsKey(plname))
-		{
-			plinvmode.remove(plname);
-		}
+		plinvmode.remove(plname);
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerKick(PlayerKickEvent e)
 	{//player can be kicked without closing furnace inventory, let's check it
 		String plname = e.getPlayer().getName();
-		if (plinvmode.containsKey(plname))
-		{
-			plinvmode.remove(plname);
-		}
+		plinvmode.remove(plname);
 	}
 	
 	private void initClientCloseInventoryFixListener()
@@ -87,9 +81,7 @@ public class MFExpFixListener implements Listener {
 				    public void onPacketReceiving(PacketEvent e) {
 						String plname = e.getPlayer().getName();
 						if (plinvmode.containsKey(plname))
-						{
-							plinvmode.remove(plname);
-						}
+						plinvmode.remove(plname);
 				    }
 				});
 	}
@@ -103,10 +95,7 @@ public class MFExpFixListener implements Listener {
 					@Override
 				    public void onPacketSending(PacketEvent e) {
 						String plname = e.getPlayer().getName();
-						if (plinvmode.containsKey(plname))
-						{
-							plinvmode.remove(plname);
-						}
+						plinvmode.remove(plname);
 				    }
 				});
 	}
