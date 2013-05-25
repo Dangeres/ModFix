@@ -32,6 +32,7 @@ public class Main extends JavaPlugin {
 	private MFTableFixListener tablel;
 	private MFVillagerFixListener villagerl;
 	private MFChunkFixListener chunkl;
+	private MFExpFixListener expl;
 	
 	//private TestEventClass testl;
 	
@@ -61,6 +62,9 @@ public class Main extends JavaPlugin {
         //init chunk bugfix listener
 		chunkl = new MFChunkFixListener(this,config);
 		getServer().getPluginManager().registerEvents(chunkl, this);
+        //init exp bugfix listener
+		expl = new MFExpFixListener(this,config);
+		getServer().getPluginManager().registerEvents(expl, this);
 		
 	}
 	
