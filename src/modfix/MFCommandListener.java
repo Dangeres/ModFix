@@ -95,6 +95,14 @@ public class MFCommandListener implements  CommandExecutor {
 				return true;
 			}
 		}
+		else if (args.length == 3 && args[0].equalsIgnoreCase("tablefix") && args[1].equalsIgnoreCase("add"))
+		{
+			if (args[2].equalsIgnoreCase("bblock"))
+			{
+				addBBlockId(sender);
+				return true;
+			}
+		}
 		return false;
 	}
 	
@@ -152,6 +160,24 @@ public class MFCommandListener implements  CommandExecutor {
 		String add = String.valueOf(pl.getItemInHand().getTypeId());
 		if (pl.getItemInHand().getDurability() !=0) {add += ":"+pl.getItemInHand().getDurability();}
 		config.IntTablesIDs.add(add);
+		config.saveConfig();
+		pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
+		}
+		else
+		{
+			sender.sendMessage(ChatColor.BLUE+"А не может у тебя быть итема в руке, тыж консоль, у тебя и рук то нет");
+		}
+	}
+	
+	private void addBBlockId(CommandSender sender)
+	{
+		if (sender instanceof Player)
+		{
+		Player pl = (Player) sender;
+		String add = String.valueOf(pl.getItemInHand().getTypeId());
+		if (pl.getItemInHand().getDurability() !=0) {add += ":"+pl.getItemInHand().getDurability();}
+		config.IntTablesIDs.add(add);
+		config.BrkTablesIDs.add(add);
 		config.saveConfig();
 		pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
 		}

@@ -108,8 +108,15 @@ public class MFTableFixListener implements Listener {
 		Block br = e.getBlock();
 		if (protectblocks.containsKey(br))
 		{
-			backreference.remove(protectblocks.get(br));
-			protectblocks.remove(br);
+			//check if user shouldn't be able to break this block
+			if (config.BrkTablesIDs.contains(getIDstring(br)))
+			{
+				e.getPlayer().sendMessage(ChatColor.RED + "Вы не можете сломать этот стол, по крайней мере сейчас");
+				e.setCancelled(true);
+			} else {
+				backreference.remove(protectblocks.get(br));
+				protectblocks.remove(br);
+			}
 		}
 	}
 	

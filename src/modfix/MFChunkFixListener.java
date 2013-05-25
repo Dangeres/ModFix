@@ -43,10 +43,7 @@ public class MFChunkFixListener implements Listener {
 		{
 			if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
 			{
-				if (!(e.getPlayer().getName().contains("[") || e.getPlayer().getName().contains("]")))
-				{
 					e.getPlayer().closeInventory();
-				}
 			}
 		}
 	}
@@ -59,10 +56,7 @@ public class MFChunkFixListener implements Listener {
 		{
 			if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
 			{
-				if (!(e.getPlayer().getName().contains("[") || e.getPlayer().getName().contains("]")))
-				{
 					e.getPlayer().closeInventory();
-				}
 			}
 		}
 	}

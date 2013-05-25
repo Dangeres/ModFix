@@ -40,6 +40,7 @@ public class ModFixConfig {
 	protected boolean enableChunkUnloadFix = true;
 	protected boolean enableTablesFix = true;
 	protected HashSet<String> IntTablesIDs= new HashSet<String>();
+	protected HashSet<String> BrkTablesIDs= new HashSet<String>();
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
@@ -49,6 +50,7 @@ public class ModFixConfig {
 		enableChunkUnloadFix = config.getBoolean("ChunkUnloadFix.enable",enableChunkUnloadFix);
 		enableTablesFix = config.getBoolean("TablesFix.enable",enableTablesFix);
 		IntTablesIDs = new HashSet<String>(config.getStringList("TablesFix.InteractBlockIDs"));
+		BrkTablesIDs = new HashSet<String>(config.getStringList("TablesFix.BreakBlockIDs"));
 
 		saveConfig();
 	}
@@ -62,6 +64,7 @@ public class ModFixConfig {
 		config.set("ChunkUnloadFix.enable",enableChunkUnloadFix);
 		config.set("TablesFix.enable",enableTablesFix);
 		config.set("TablesFix.InteractBlockIDs",new ArrayList<String>(IntTablesIDs));
+		config.set("TablesFix.BreakBlockIDs",new ArrayList<String>(BrkTablesIDs));
 		try {
 			config.save(new File("plugins/ModFix/config.yml"));
 		} catch (IOException e) {
