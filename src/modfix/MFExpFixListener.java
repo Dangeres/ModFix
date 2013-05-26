@@ -129,6 +129,7 @@ public class MFExpFixListener implements Listener {
 						
 						//revert xp if needed
 						if (revertxp) {
+							System.out.println("Reverting xp of player "+e.getPlayer().getName());
 							Runnable setexp = new Runnable()
 							{
 								String pl = player.getName();
@@ -140,11 +141,12 @@ public class MFExpFixListener implements Listener {
 									{
 										Bukkit.getPlayerExact(pl).setLevel(level);
 										Bukkit.getPlayerExact(pl).setExp(exp);
+										System.out.println("Reverted xp of player "+pl);
 									}
 								}
 						
 							};
-							Bukkit.getScheduler().scheduleSyncDelayedTask(main, setexp, 2);
+							Bukkit.getScheduler().scheduleSyncDelayedTask(main, setexp, config.reverxpticks);
 						}
 				    }
 				});

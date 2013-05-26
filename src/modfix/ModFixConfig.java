@@ -44,6 +44,7 @@ public class ModFixConfig {
 	protected boolean enableExpFix = true;
 	protected HashSet<String> Furn3slotIDs= new HashSet<String>();
 	protected HashSet<String> Furn5slotIDs= new HashSet<String>();
+	protected int reverxpticks = 2;
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
@@ -55,6 +56,7 @@ public class ModFixConfig {
 		IntTablesIDs = new HashSet<String>(config.getStringList("TablesFix.InteractBlockIDs"));
 		BrkTablesIDs = new HashSet<String>(config.getStringList("TablesFix.BreakBlockIDs"));
 		enableExpFix = config.getBoolean("ExpFix.enable",enableExpFix);
+		reverxpticks = config.getInt("ExpFix.revertxpafterticks",reverxpticks);
 		Furn3slotIDs = new HashSet<String>(config.getStringList("ExpFix.3FurnaceIds"));
 		Furn5slotIDs = new HashSet<String>(config.getStringList("ExpFix.5FurnaceIds"));
 		
@@ -73,6 +75,7 @@ public class ModFixConfig {
 		config.set("TablesFix.InteractBlockIDs",new ArrayList<String>(IntTablesIDs));
 		config.set("TablesFix.BreakBlockIDs",new ArrayList<String>(BrkTablesIDs));
 		config.set("ExpFix.enable",enableExpFix);
+		config.set("ExpFix.revertxpafterticks",reverxpticks);
 		config.set("ExpFix.3FurnaceIds",new ArrayList<String>(Furn3slotIDs));
 		config.set("ExpFix.5FurnaceIds",new ArrayList<String>(Furn5slotIDs));
 		try {
