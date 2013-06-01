@@ -92,6 +92,9 @@ public class MFTableFixListener implements Listener {
 				  ListenerPriority.HIGHEST, Packets.Client.CLOSE_WINDOW) {
 					@Override
 				    public void onPacketReceiving(PacketEvent e) {
+						
+				    	if (e.getPlayer().getName().contains("[")) {return;}
+				    	
 						String plname = e.getPlayer().getName();
 					if (backreference.containsKey(plname))
 						{//gotcha, you closed table inventory
@@ -105,6 +108,9 @@ public class MFTableFixListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent e)
 	{//Player can break opened block and then won't trigger inventory closing
+		if (!config.enableTablesFix) {return;}
+		
+		
 		Block br = e.getBlock();
 		if (protectblocks.containsKey(br))
 		{

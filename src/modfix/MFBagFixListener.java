@@ -81,6 +81,9 @@ public class MFBagFixListener implements Listener {
 				    @SuppressWarnings("deprecation")
 					@Override
 				    public void onPacketReceiving(PacketEvent e) {
+				    	
+				    	if (e.getPlayer().getName().contains("[")) {return;}
+				    	
 				    	if (!config.enableBackPackFix) {return;}
 				    	if (!(e.getPacketID() == Packets.Client.WINDOW_CLICK)) {return;}
 				    	Player pl = e.getPlayer();

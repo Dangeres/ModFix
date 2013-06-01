@@ -27,7 +27,7 @@ public class MFExpFixListener implements Listener {
 	MFExpFixListener(Main main, ModFixConfig config) {
 		this.main = main;
 		this.config = config;
-		initTestBugFixListener();
+		initExpBugFixListener();
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
 	}
@@ -79,6 +79,9 @@ public class MFExpFixListener implements Listener {
 				  ListenerPriority.HIGHEST, Packets.Client.CLOSE_WINDOW) {
 					@Override
 				    public void onPacketReceiving(PacketEvent e) {
+						
+				    	if (e.getPlayer().getName().contains("[")) {return;}
+				    	
 						String plname = e.getPlayer().getName();
 						if (plinvmode.containsKey(plname))
 						plinvmode.remove(plname);
@@ -94,6 +97,9 @@ public class MFExpFixListener implements Listener {
 				  ListenerPriority.HIGHEST, Packets.Server.CLOSE_WINDOW) {
 					@Override
 				    public void onPacketSending(PacketEvent e) {
+						
+				    	if (e.getPlayer().getName().contains("[")) {return;}
+				    	
 						String plname = e.getPlayer().getName();
 						plinvmode.remove(plname);
 				    }
@@ -101,13 +107,17 @@ public class MFExpFixListener implements Listener {
 	}
 	
 	//set exp back if player clicked final furnace slot
-	private void initTestBugFixListener()
+	private void initExpBugFixListener()
 	{
 		main.protocolManager.addPacketListener(
 				  new PacketAdapter(main, ConnectionSide.CLIENT_SIDE, 
 				  ListenerPriority.HIGHEST, Packets.Client.WINDOW_CLICK) {
 					@Override
 				    public void onPacketReceiving(final PacketEvent e) {
+						
+				    	if (e.getPlayer().getName().contains("[")) {return;}
+				    	
+				    	
 						final Player player = e.getPlayer();
 						if (!plinvmode.containsKey(player.getName())) {return;} //ignore if player clicked not furnace inventory
 						
@@ -129,7 +139,6 @@ public class MFExpFixListener implements Listener {
 						
 						//revert xp if needed
 						if (revertxp) {
-							System.out.println("Reverting xp of player "+e.getPlayer().getName());
 							Runnable setexp = new Runnable()
 							{
 								String pl = player.getName();
@@ -141,7 +150,6 @@ public class MFExpFixListener implements Listener {
 									{
 										Bukkit.getPlayerExact(pl).setLevel(level);
 										Bukkit.getPlayerExact(pl).setExp(exp);
-										System.out.println("Reverted xp of player "+pl);
 									}
 								}
 						

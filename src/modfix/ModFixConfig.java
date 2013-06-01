@@ -44,7 +44,7 @@ public class ModFixConfig {
 	protected boolean enableExpFix = true;
 	protected HashSet<String> Furn3slotIDs= new HashSet<String>();
 	protected HashSet<String> Furn5slotIDs= new HashSet<String>();
-	protected int reverxpticks = 2;
+	protected int reverxpticks = 4;
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
