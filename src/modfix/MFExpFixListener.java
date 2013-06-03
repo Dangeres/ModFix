@@ -1,14 +1,13 @@
 package modfix;
 
-import java.util.HashMap;
+import java.util.HashSet;
 
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -27,32 +26,26 @@ public class MFExpFixListener implements Listener {
 	MFExpFixListener(Main main, ModFixConfig config) {
 		this.main = main;
 		this.config = config;
-		initExpBugFixListener();
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
 	}
 
 	
-	private HashMap<String, Integer> plinvmode = new HashMap<String, Integer>(); //String - playername , int - furnace type (1 - 3slot, 2 - 5slot)
+	private HashSet<String> plinf = new HashSet<String>(); //We will add player to this list when he enters furnace and remove when he leaves
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void OnPlayerIneractFurnace(PlayerInteractEvent e)
 	{
 		if (!config.enableExpFix) {return;}
 		
-		
+	
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
-			Player pl = e.getPlayer();
-			Block binteract = e.getClickedBlock();
-			String checkid = getIDstring(binteract);
-			if (config.Furn3slotIDs.contains(checkid))
+
+			String checkid = getIDstring(e.getClickedBlock());
+			if (config.furnSlotIDs.contains(checkid))
 			{
-				plinvmode.put(pl.getName(), 1);
-			}
-			if (config.Furn5slotIDs.contains(checkid))
-			{
-				plinvmode.put(pl.getName(), 2);
+				plinf.add(e.getPlayer().getName());
 			}
 		}
 	}
@@ -60,16 +53,13 @@ public class MFExpFixListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerQuit(PlayerQuitEvent e)
 	{//player can quit without closing furnace inventory, let's check it
-		String plname = e.getPlayer().getName();
-		if (plinvmode.containsKey(plname))
-		plinvmode.remove(plname);
+		plinf.remove(e.getPlayer().getName());
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerKick(PlayerKickEvent e)
 	{//player can be kicked without closing furnace inventory, let's check it
-		String plname = e.getPlayer().getName();
-		plinvmode.remove(plname);
+		plinf.remove(e.getPlayer().getName());
 	}
 	
 	private void initClientCloseInventoryFixListener()
@@ -82,9 +72,7 @@ public class MFExpFixListener implements Listener {
 						
 				    	if (e.getPlayer().getName().contains("[")) {return;}
 				    	
-						String plname = e.getPlayer().getName();
-						if (plinvmode.containsKey(plname))
-						plinvmode.remove(plname);
+						plinf.remove(e.getPlayer().getName());
 				    }
 				});
 	}
@@ -100,64 +88,20 @@ public class MFExpFixListener implements Listener {
 						
 				    	if (e.getPlayer().getName().contains("[")) {return;}
 				    	
-						String plname = e.getPlayer().getName();
-						plinvmode.remove(plname);
+						plinf.remove(e.getPlayer().getName());
 				    }
 				});
 	}
 	
-	//set exp back if player clicked final furnace slot
-	private void initExpBugFixListener()
+    //won't allow player to earn exp if he is in furnace	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onExpGain(PlayerExpChangeEvent e)
 	{
-		main.protocolManager.addPacketListener(
-				  new PacketAdapter(main, ConnectionSide.CLIENT_SIDE, 
-				  ListenerPriority.HIGHEST, Packets.Client.WINDOW_CLICK) {
-					@Override
-				    public void onPacketReceiving(final PacketEvent e) {
-						
-				    	if (e.getPlayer().getName().contains("[")) {return;}
-				    	
-				    	
-						final Player player = e.getPlayer();
-						if (!plinvmode.containsKey(player.getName())) {return;} //ignore if player clicked not furnace inventory
-						
-						boolean revertxp = false;
-						if (plinvmode.get(player.getName()) == 1)
-						{
-							if (e.getPacket().getIntegers().getValues().get(1) == 2)
-							{
-								revertxp = true;
-							}
-						}
-						if (plinvmode.get(player.getName()) == 2)
-						{
-							if (e.getPacket().getIntegers().getValues().get(1) == 3 || e.getPacket().getIntegers().getValues().get(1) == 4)
-							{
-								revertxp = true;
-							}
-						}
-						
-						//revert xp if needed
-						if (revertxp) {
-							Runnable setexp = new Runnable()
-							{
-								String pl = player.getName();
-								int level = player.getLevel();
-								float exp = player.getExp();
-								public void run()
-								{
-									if (Bukkit.getOfflinePlayer(pl).isOnline())
-									{
-										Bukkit.getPlayerExact(pl).setLevel(level);
-										Bukkit.getPlayerExact(pl).setExp(exp);
-									}
-								}
-						
-							};
-							Bukkit.getScheduler().scheduleSyncDelayedTask(main, setexp, config.reverxpticks);
-						}
-				    }
-				});
+		if (!config.enableExpFix) {return;}
+		if (plinf.contains(e.getPlayer().getName()))
+		{
+			e.setAmount(0);
+		}
 	}
 	
 	

@@ -1,6 +1,6 @@
 name: ModFix
 main: modfix.Main
-version: 2.1
+version: 2.1.dev
 author: Shevchik
 depend: [ProtocolLib]
 load: STARTUP
