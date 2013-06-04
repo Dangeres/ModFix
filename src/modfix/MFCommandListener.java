@@ -120,7 +120,7 @@ public class MFCommandListener implements  CommandExecutor {
 		sender.sendMessage(ChatColor.AQUA+"/modfix bagfix add 19block"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса сумок (баг с кнопками 1-9)");
 		sender.sendMessage(ChatColor.AQUA+"/modfix tablefix add iblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса столов (баг с одновременно открытым у 2х человек столом)");
 		sender.sendMessage(ChatColor.AQUA+"/modfix tablefix add bblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса столов (баг с ломанием открытого стола )) Внимание: не спасает от слома стола предметами из модов");
-		sender.sendMessage(ChatColor.AQUA+"/modfix expfix add expblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса пыта из печек (баг с помещением итема в Result slot)");
+		sender.sendMessage(ChatColor.AQUA+"/modfix expfix add expblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса опыта из печек (баг с помещением итема в Result slot)");
 	}
 	
 	private void displayItemInfo(CommandSender sender)
