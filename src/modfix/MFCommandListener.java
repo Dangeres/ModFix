@@ -103,6 +103,12 @@ public class MFCommandListener implements  CommandExecutor {
 				return true;
 			}
 		}
+		else if (args.length == 3 && args[0].equalsIgnoreCase("expfix") && args[1].equalsIgnoreCase("add"))
+			if (args[2].equalsIgnoreCase("expblock"))
+			{
+				addExpBlockId(sender);
+				return true;
+			}
 		return false;
 	}
 	
@@ -114,6 +120,7 @@ public class MFCommandListener implements  CommandExecutor {
 		sender.sendMessage(ChatColor.AQUA+"/modfix bagfix add 19block"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса сумок (баг с кнопками 1-9)");
 		sender.sendMessage(ChatColor.AQUA+"/modfix tablefix add iblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса столов (баг с одновременно открытым у 2х человек столом)");
 		sender.sendMessage(ChatColor.AQUA+"/modfix tablefix add bblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса столов (баг с ломанием открытого стола )) Внимание: не спасает от слома стола предметами из модов");
+		sender.sendMessage(ChatColor.AQUA+"/modfix expfix add expblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса пыта из печек (баг с помещением итема в Result slot)");
 	}
 	
 	private void displayItemInfo(CommandSender sender)
@@ -141,10 +148,10 @@ public class MFCommandListener implements  CommandExecutor {
 	{
 		if (sender instanceof Player)
 		{
-		Player pl = (Player) sender;
-		config.BackPacks19IDs.add(pl.getItemInHand().getTypeId());
-		config.saveConfig();
-		pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
+			Player pl = (Player) sender;
+			config.BackPacks19IDs.add(pl.getItemInHand().getTypeId());
+			config.saveConfig();
+			pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
 		}
 		else
 		{
@@ -156,12 +163,14 @@ public class MFCommandListener implements  CommandExecutor {
 	{
 		if (sender instanceof Player)
 		{
-		Player pl = (Player) sender;
-		String add = String.valueOf(pl.getItemInHand().getTypeId());
-		if (pl.getItemInHand().getDurability() !=0) {add += ":"+pl.getItemInHand().getDurability();}
-		config.IntTablesIDs.add(add);
-		config.saveConfig();
-		pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
+			Player pl = (Player) sender;
+			
+			String add = String.valueOf(pl.getItemInHand().getTypeId());
+			if (pl.getItemInHand().getDurability() !=0) {add += ":"+pl.getItemInHand().getDurability();}
+			
+			config.IntTablesIDs.add(add);
+			config.saveConfig();
+			pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
 		}
 		else
 		{
@@ -173,13 +182,47 @@ public class MFCommandListener implements  CommandExecutor {
 	{
 		if (sender instanceof Player)
 		{
-		Player pl = (Player) sender;
-		String add = String.valueOf(pl.getItemInHand().getTypeId());
-		if (pl.getItemInHand().getDurability() !=0) {add += ":"+pl.getItemInHand().getDurability();}
-		config.IntTablesIDs.add(add);
-		config.BrkTablesIDs.add(add);
-		config.saveConfig();
-		pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
+			Player pl = (Player) sender;
+			
+			String add = String.valueOf(pl.getItemInHand().getTypeId());
+			if (pl.getItemInHand().getDurability() !=0) {add += ":"+pl.getItemInHand().getDurability();}
+			
+			config.IntTablesIDs.add(add);
+			config.BrkTablesIDs.add(add);
+			config.saveConfig();
+			pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
+		}
+		else
+		{
+			sender.sendMessage(ChatColor.BLUE+"А не может у тебя быть итема в руке, тыж консоль, у тебя и рук то нет");
+		}
+	}
+	private void addExpBlockId(CommandSender sender)
+	{
+		if (sender instanceof Player)
+		{
+			Player pl = (Player) sender;
+			
+			String add = String.valueOf(pl.getItemInHand().getTypeId());
+			if (pl.getItemInHand().getDurability() !=0) {add += ":"+pl.getItemInHand().getDurability();}
+			
+			if (pl.getItemInHand().getTypeId() == 62 || pl.getItemInHand().getTypeId() == 61) //noramal furnace has ids from 62:2 to 62:5 when placed
+			{
+				config.furnSlotIDs.add("61:2");
+				config.furnSlotIDs.add("61:3");
+				config.furnSlotIDs.add("61:4");
+				config.furnSlotIDs.add("61:5");
+				config.furnSlotIDs.add("62:2");
+				config.furnSlotIDs.add("62:3");
+				config.furnSlotIDs.add("62:4");
+				config.furnSlotIDs.add("62:5");
+			}
+			else 
+			{
+			config.furnSlotIDs.add(add);
+			}
+			config.saveConfig();
+			pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
 		}
 		else
 		{
