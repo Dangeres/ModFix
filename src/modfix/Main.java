@@ -17,6 +17,9 @@
 
 package modfix;
 
+import java.util.logging.Logger;
+
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -25,6 +28,8 @@ import com.comphenix.protocol.ProtocolManager;
 //warning: this plugin requires ProtocolLib to run
 public class Main extends JavaPlugin {
 
+	private Logger log = Bukkit.getLogger();
+	
 	private ModFixConfig config;
 	
 	private MFCommandListener commandl;
@@ -34,16 +39,26 @@ public class Main extends JavaPlugin {
 	private MFChunkFixListener chunkl;
 	private MFExpFixListener expl;
 	
-	//private TestEventClass testl;
+	private boolean enableself = true;
 	
 	public ProtocolManager protocolManager = null;
 	@Override
 	public void onLoad() {
+		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null)
+		{
+			enableself = false;
+			log.severe("[ModFix] ProtolLib is not installed, install it first");
+			log.severe("[ModFix] Shutting down server");
+			Bukkit.shutdown();
+		}
+		else {
 	    protocolManager = ProtocolLibrary.getProtocolManager();
+		}
 	}
 	
 	@Override
 	public void onEnable() {
+		if (enableself) {
 		//init config
 		config = new ModFixConfig(this);
 		config.loadConfig();
@@ -65,17 +80,19 @@ public class Main extends JavaPlugin {
         //init exp bugfix listener
 		expl = new MFExpFixListener(this,config);
 		getServer().getPluginManager().registerEvents(expl, this);
-		
+		}
 	}
 	
 	@Override
 	public void onDisable() {
+		if (enableself) {
 		//null variables for folks reloading plugins
 		config.saveConfig();
 		config = null;
 		commandl = null;
 		tablel = null;
 		villagerl = null;
+		}
 	}
 	
 	

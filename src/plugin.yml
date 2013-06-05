@@ -2,7 +2,7 @@ name: ModFix
 main: modfix.Main
 version: 2.1.dev
 author: Shevchik
-depend: [ProtocolLib]
+softdepend: [ProtocolLib]
 load: STARTUP
 commands:
   modfix:

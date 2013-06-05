@@ -33,7 +33,6 @@ public class ModFixConfig {
 		this.main = main;
 	}
 	
-	
 	protected boolean enableVillagersFix = true;
 	protected boolean enableBackPackFix = true;
 	protected HashSet<Integer> BackPacks19IDs = new HashSet<Integer>();
@@ -57,7 +56,7 @@ public class ModFixConfig {
 		enableExpFix = config.getBoolean("ExpFix.enable",enableExpFix);
 		furnSlotIDs = new HashSet<String>(config.getStringList("ExpFix.FurnaceIds"));
 		
-
+		
 		saveConfig();
 	}
 	
