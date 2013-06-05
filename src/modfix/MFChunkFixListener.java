@@ -20,6 +20,7 @@ package modfix;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -58,6 +59,16 @@ public class MFChunkFixListener implements Listener {
 			{
 					e.getPlayer().closeInventory();
 			}
+		}
+	}
+	
+	//close inventory on world change
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onPlayerChangedWolrd(PlayerChangedWorldEvent e)
+	{
+		if (config.enableChunkUnloadFix)
+		{
+			e.getPlayer().closeInventory();
 		}
 	}
 }
