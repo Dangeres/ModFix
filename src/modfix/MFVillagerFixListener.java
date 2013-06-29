@@ -45,11 +45,10 @@ public class MFVillagerFixListener implements Listener {
 		if (config.enableVillagersFix) {
 			if (event.getView().getTopInventory() != null && event.getView().getTopInventory().getType().equals(InventoryType.MERCHANT)) {
 				if (event.isShiftClick()) {
-					if (event.getSlotType().equals(SlotType.RESULT)
-							&& event.getCurrentItem().getType() != Material.EMERALD) {
+					if (event.getSlotType().equals(SlotType.RESULT) && event.getCurrentItem().getType() != Material.EMERALD) {
 						event.setCancelled(true);
 						event.getWhoClicked().closeInventory();
-						Bukkit.getPlayer(event.getWhoClicked().getName()).sendMessage(ChatColor.RED+ "Запрещено покупать у жителей за изумруды shift-кликом");
+						Bukkit.getPlayerExact(event.getWhoClicked().getName()).sendMessage(ChatColor.RED+ "Запрещено покупать у жителей за изумруды shift-кликом");
 					}
 				}
 			}
