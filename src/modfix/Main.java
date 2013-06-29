@@ -66,6 +66,7 @@ public class Main extends JavaPlugin {
 		//init command listener
 		commandl = new MFCommandListener(this,config);
 		getCommand("modfix").setExecutor(commandl);
+		getServer().getPluginManager().registerEvents(commandl, this);
 		//init bag bugfix listener
 		bagl = new MFBagFixListener(this,config);
 		getServer().getPluginManager().registerEvents(bagl, this);
@@ -97,6 +98,8 @@ public class Main extends JavaPlugin {
 		tablel = null;
 		villagerl = null;
 		mpl = null;
+		protocolManager.removePacketListeners(this);
+		protocolManager = null;
 		}
 	}
 	

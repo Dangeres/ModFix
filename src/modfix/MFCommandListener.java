@@ -17,6 +17,8 @@
 
 package modfix;
 
+import java.util.HashSet;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,12 +26,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 
-public class MFCommandListener implements  CommandExecutor {
+public class MFCommandListener implements  CommandExecutor, Listener {
 	@SuppressWarnings("unused")
 	private Main main;
 	private ModFixConfig config;
-
+	private HashSet<String> pleinfoswitch = new HashSet<String>();
+	
+	
 	MFCommandListener(Main main, ModFixConfig config) {
 		this.main = main;
 		this.config = config;
@@ -79,6 +87,11 @@ public class MFCommandListener implements  CommandExecutor {
 			displayItemInfo(sender);
 			return true;
 		}
+		else if (args.length == 1 && args[0].equalsIgnoreCase("einfo"))
+		{
+			displayEntityInfo(sender);
+			return true;
+		}
 		else if (args.length == 3 && args[0].equalsIgnoreCase("bagfix") && args[1].equalsIgnoreCase("add"))
 		{
 			if (args[2].equalsIgnoreCase("19block"))
@@ -113,10 +126,13 @@ public class MFCommandListener implements  CommandExecutor {
 	}
 	
 	
+	
+	
 	private void displayHelp(CommandSender sender)
 	{
 		sender.sendMessage(ChatColor.AQUA+"/modfix reload "+ChatColor.WHITE+"-"+ChatColor.BLUE+" перезагрузить конфиг плагина");
 		sender.sendMessage(ChatColor.AQUA+"/modfix iinfo "+ChatColor.WHITE+"-"+ChatColor.BLUE+" получить id и subid итема в руке");
+		sender.sendMessage(ChatColor.AQUA+"/modfix einfo "+ChatColor.WHITE+"-"+ChatColor.BLUE+" получить Entity Network ID");
 		sender.sendMessage(ChatColor.AQUA+"/modfix bagfix add 19block"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса сумок (баг с кнопками 1-9)");
 		sender.sendMessage(ChatColor.AQUA+"/modfix tablefix add iblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса столов (баг с одновременно открытым у 2х человек столом)");
 		sender.sendMessage(ChatColor.AQUA+"/modfix tablefix add bblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса столов (баг с ломанием открытого стола )) Внимание: не спасает от слома стола предметами из модов");
@@ -141,6 +157,20 @@ public class MFCommandListener implements  CommandExecutor {
 		else
 		{
 			sender.sendMessage(ChatColor.BLUE+"А не может у тебя быть итема в руке, тыж консоль, у тебя и рук то нет");
+		}
+	}
+	
+	public void displayEntityInfo(CommandSender sender)
+	{
+		if (sender instanceof Player)
+		{
+			Player pl = (Player) sender;
+			pl.sendMessage(ChatColor.BLUE+"Кликните правой кнопкой мыши по Entity, для того чтобы узнать её Network ID");
+			pleinfoswitch.add(pl.getName());
+		}
+		else
+		{
+			sender.sendMessage(ChatColor.BLUE+"У консоли нет рук, она не может ударить Entity");
 		}
 	}
 	
@@ -227,6 +257,17 @@ public class MFCommandListener implements  CommandExecutor {
 		else
 		{
 			sender.sendMessage(ChatColor.BLUE+"А не может у тебя быть итема в руке, тыж консоль, у тебя и рук то нет");
+		}
+	}
+	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onPlayerCheckEntityID(PlayerInteractEntityEvent e)
+	{
+		Player pl = e.getPlayer();
+		if (pleinfoswitch.contains(pl.getName()))
+		{
+			pl.sendMessage(ChatColor.BLUE+"NetworkID: "+e.getRightClicked().getType().getTypeId());
+			pleinfoswitch.remove(pl.getName());
 		}
 	}
 		
