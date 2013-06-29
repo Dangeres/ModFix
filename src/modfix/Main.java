@@ -38,10 +38,11 @@ public class Main extends JavaPlugin {
 	private MFVillagerFixListener villagerl;
 	private MFChunkFixListener chunkl;
 	private MFExpFixListener expl;
+	private MFMinecartPortalListener mpl;
 	
-	private boolean enableself = true;
 	
 	public ProtocolManager protocolManager = null;
+	private boolean enableself = true;
 	@Override
 	public void onLoad() {
 		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null)
@@ -80,6 +81,9 @@ public class Main extends JavaPlugin {
         //init exp bugfix listener
 		expl = new MFExpFixListener(this,config);
 		getServer().getPluginManager().registerEvents(expl, this);
+		//init minecart bugfix listener
+		mpl = new MFMinecartPortalListener(this,config);
+		getServer().getPluginManager().registerEvents(mpl, this);
 		}
 	}
 	
@@ -92,6 +96,7 @@ public class Main extends JavaPlugin {
 		commandl = null;
 		tablel = null;
 		villagerl = null;
+		mpl = null;
 		}
 	}
 	

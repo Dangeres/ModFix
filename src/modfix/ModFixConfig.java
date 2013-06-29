@@ -42,8 +42,9 @@ public class ModFixConfig {
 	protected HashSet<String> BrkTablesIDs= new HashSet<String>();
 	protected boolean enableExpFix = true;
 	protected HashSet<String> furnSlotIDs= new HashSet<String>();
+	protected boolean enableMinecartFix = true;
+	protected HashSet<Short> minecartsIDs = new HashSet<Short>();
 
-	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
 		enableBackPackFix = config.getBoolean("BackPackFix.enable",enableBackPackFix);
@@ -55,6 +56,9 @@ public class ModFixConfig {
 		BrkTablesIDs = new HashSet<String>(config.getStringList("TablesFix.BreakBlockIDs"));
 		enableExpFix = config.getBoolean("ExpFix.enable",enableExpFix);
 		furnSlotIDs = new HashSet<String>(config.getStringList("ExpFix.FurnaceIds"));
+		enableMinecartFix = config.getBoolean("MinecartPortalFix.enable", enableMinecartFix);
+		minecartsIDs = new HashSet<Short>(config.getShortList("MinecartPortalFix.cartsIDs"));
+		
 		
 		
 		saveConfig();
@@ -72,6 +76,8 @@ public class ModFixConfig {
 		config.set("TablesFix.BreakBlockIDs",new ArrayList<String>(BrkTablesIDs));
 		config.set("ExpFix.enable",enableExpFix);
 		config.set("ExpFix.FurnaceIds",new ArrayList<String>(furnSlotIDs));
+		config.set("MinecartPortalFix.enable", enableMinecartFix);
+		config.set("MinecartPortalFix.cartsIDs",new ArrayList<Short>(minecartsIDs));
 		try {
 			config.save(new File("plugins/ModFix/config.yml"));
 		} catch (IOException e) {
