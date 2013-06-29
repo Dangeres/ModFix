@@ -17,6 +17,9 @@
 
 package modfix;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,6 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.Packets;
 import com.comphenix.protocol.events.ConnectionSide;
@@ -46,10 +50,30 @@ public class MFBagFixListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerD(PlayerDeathEvent event) {
 		if (config.enableBackPackFix) {
-			if (event.getEntity() instanceof Player) {
-				Player p = (Player) event.getEntity();
+			Player p = (Player) event.getEntity();
+			p.closeInventory();
+			if (config.fixcrop) {
+				if (p.getItemInHand().getTypeId() == config.CropanalyzerID)
 				{
-					p.closeInventory();
+					List<ItemStack> itoremove = new ArrayList<ItemStack>();
+					int icount = 0;
+					for (ItemStack i : event.getDrops())
+					{
+						if (i.getTypeId() == config.CropanalyzerID)
+						{
+							itoremove.add(i);
+							icount++;
+						}
+					}
+					event.getDrops().removeAll(itoremove);
+					for (int i = 0; i<icount; i++)
+					{
+						ItemStack add = new ItemStack(config.CropanalyzerID);
+						{
+							event.getDrops().add(add);
+						}
+					}
+					
 				}
 			}
 		}
@@ -71,6 +95,7 @@ public class MFBagFixListener implements Listener {
 					event.getPlayer().closeInventory();
 			}
 	}
+
 	
 	//restrict using 1-9 buttons in modded inventories
 	private void initBag19BugFixListener()
