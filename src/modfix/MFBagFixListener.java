@@ -52,9 +52,8 @@ public class MFBagFixListener implements Listener {
 		if (config.enableBackPackFix) {
 			Player p = (Player) event.getEntity();
 			p.closeInventory();
-			if (config.fixcrop) {
-				if (p.getItemInHand().getTypeId() == config.CropanalyzerID)
-				{
+			if (config.fixcrop) 
+			{
 					List<ItemStack> itoremove = new ArrayList<ItemStack>();
 					int icount = 0;
 					for (ItemStack i : event.getDrops())
@@ -73,8 +72,6 @@ public class MFBagFixListener implements Listener {
 							event.getDrops().add(add);
 						}
 					}
-					
-				}
 			}
 		}
 

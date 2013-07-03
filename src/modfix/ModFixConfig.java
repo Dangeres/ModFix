@@ -46,7 +46,9 @@ public class ModFixConfig {
 	protected HashSet<String> furnSlotIDs= new HashSet<String>();
 	protected boolean enableMinecartFix = true;
 	protected HashSet<Short> minecartsIDs = new HashSet<Short>();
-
+	protected boolean enableRailsFix = true;
+	protected HashSet<Integer> RailsIDs = new HashSet<Integer>();
+	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
 		enableBackPackFix = config.getBoolean("BackPackFix.enable",enableBackPackFix);
@@ -62,9 +64,9 @@ public class ModFixConfig {
 		furnSlotIDs = new HashSet<String>(config.getStringList("ExpFix.FurnaceIds"));
 		enableMinecartFix = config.getBoolean("MinecartPortalFix.enable", enableMinecartFix);
 		minecartsIDs = new HashSet<Short>(config.getShortList("MinecartPortalFix.cartsIDs"));
-		
-		
-		
+		enableRailsFix = config.getBoolean("RailsFix.enable", enableRailsFix);
+		RailsIDs = new HashSet<Integer>(config.getIntegerList("RailsFix.railsIDs"));
+				
 		saveConfig();
 	}
 	
@@ -84,6 +86,8 @@ public class ModFixConfig {
 		config.set("ExpFix.FurnaceIds",new ArrayList<String>(furnSlotIDs));
 		config.set("MinecartPortalFix.enable", enableMinecartFix);
 		config.set("MinecartPortalFix.cartsIDs",new ArrayList<Short>(minecartsIDs));
+		config.set("RailsFix.enable", enableRailsFix);
+		config.set("RailsFix.railsIDs",new ArrayList<Integer>(RailsIDs));
 		try {
 			config.save(new File("plugins/ModFix/config.yml"));
 		} catch (IOException e) {

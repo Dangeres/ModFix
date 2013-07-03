@@ -39,6 +39,7 @@ public class Main extends JavaPlugin {
 	private MFChunkFixListener chunkl;
 	private MFExpFixListener expl;
 	private MFMinecartPortalListener mpl;
+	private MFRailsFixListener rfl;
 	
 	
 	public ProtocolManager protocolManager = null;
@@ -85,6 +86,9 @@ public class Main extends JavaPlugin {
 		//init minecart bugfix listener
 		mpl = new MFMinecartPortalListener(this,config);
 		getServer().getPluginManager().registerEvents(mpl, this);
+		//init rails ugfix listener
+		rfl = new MFRailsFixListener(this,config);
+		getServer().getPluginManager().registerEvents(rfl, this);
 		}
 	}
 	
@@ -98,6 +102,7 @@ public class Main extends JavaPlugin {
 		tablel = null;
 		villagerl = null;
 		mpl = null;
+		rfl = null;
 		protocolManager.removePacketListeners(this);
 		protocolManager = null;
 		}
