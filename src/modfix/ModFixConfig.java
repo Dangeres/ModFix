@@ -38,7 +38,8 @@ public class ModFixConfig {
 	protected HashSet<Integer> BackPacks19IDs = new HashSet<Integer>();
 	protected boolean fixcrop = true;
 	protected int CropanalyzerID = 30122;
-	protected boolean enableChunkUnloadFix = true;
+	protected boolean enableChunkUnloadFixTP = true;
+	protected boolean enableChunkUnloadFixMove = true;
 	protected boolean enableTablesFix = true;
 	protected HashSet<String> IntTablesIDs= new HashSet<String>();
 	protected HashSet<String> BrkTablesIDs= new HashSet<String>();
@@ -56,7 +57,8 @@ public class ModFixConfig {
 		fixcrop = config.getBoolean("BackPackFix.CropanalyzerFix.enable",fixcrop);
 		CropanalyzerID = config.getInt("BackPackFix.CropanalyzerFix.ID",CropanalyzerID);
 		enableVillagersFix = config.getBoolean("VillagersFix.enable",enableVillagersFix);
-		enableChunkUnloadFix = config.getBoolean("ChunkUnloadFix.enable",enableChunkUnloadFix);
+		enableChunkUnloadFixTP = config.getBoolean("ChunkUnloadFix.enable.teleport",enableChunkUnloadFixTP);
+		enableChunkUnloadFixMove = config.getBoolean("ChunkUnloadFix.enable.movement",enableChunkUnloadFixMove);
 		enableTablesFix = config.getBoolean("TablesFix.enable",enableTablesFix);
 		IntTablesIDs = new HashSet<String>(config.getStringList("TablesFix.InteractBlockIDs"));
 		BrkTablesIDs = new HashSet<String>(config.getStringList("TablesFix.BreakBlockIDs"));
@@ -78,7 +80,8 @@ public class ModFixConfig {
 		config.set("BackPackFix.CropanalyzerFix.enable",fixcrop);
 		config.set("BackPackFix.CropanalyzerFix.ID",CropanalyzerID);
 		config.set("VillagersFix.enable",enableVillagersFix);
-		config.set("ChunkUnloadFix.enable",enableChunkUnloadFix);
+		config.set("ChunkUnloadFix.enable.teleport",enableChunkUnloadFixTP);
+		config.set("ChunkUnloadFix.enable.movement",enableChunkUnloadFixMove);
 		config.set("TablesFix.enable",enableTablesFix);
 		config.set("TablesFix.InteractBlockIDs",new ArrayList<String>(IntTablesIDs));
 		config.set("TablesFix.BreakBlockIDs",new ArrayList<String>(BrkTablesIDs));

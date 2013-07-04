@@ -40,7 +40,7 @@ public class MFChunkFixListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerChangedChunkByMoveEvent(PlayerMoveEvent e)
 	{
-		if (config.enableChunkUnloadFix)
+		if (config.enableChunkUnloadFixMove)
 		{
 			if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
 			{
@@ -53,7 +53,7 @@ public class MFChunkFixListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerChangedChunkByTeleport(PlayerTeleportEvent e)
 	{
-		if (config.enableChunkUnloadFix)
+		if (config.enableChunkUnloadFixTP)
 		{
 			if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
 			{
@@ -66,7 +66,7 @@ public class MFChunkFixListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerChangedWolrd(PlayerChangedWorldEvent e)
 	{
-		if (config.enableChunkUnloadFix)
+		if (config.enableChunkUnloadFixTP)
 		{
 			e.getPlayer().closeInventory();
 		}
