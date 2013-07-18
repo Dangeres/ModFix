@@ -20,6 +20,7 @@ package modfix;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -39,8 +40,7 @@ public class Main extends JavaPlugin {
 	private MFChunkFixListener chunkl;
 	private MFExpFixListener expl;
 	private MFMinecartPortalListener mpl;
-	private MFRailsFixListener rfl;
-	
+	private MFRailsFixListener rfl;	
 	
 	public ProtocolManager protocolManager = null;
 	private boolean enableself = true;
@@ -67,7 +67,6 @@ public class Main extends JavaPlugin {
 		//init command listener
 		commandl = new MFCommandListener(this,config);
 		getCommand("modfix").setExecutor(commandl);
-		getServer().getPluginManager().registerEvents(commandl, this);
 		//init bag bugfix listener
 		bagl = new MFBagFixListener(this,config);
 		getServer().getPluginManager().registerEvents(bagl, this);
@@ -86,7 +85,7 @@ public class Main extends JavaPlugin {
 		//init minecart bugfix listener
 		mpl = new MFMinecartPortalListener(this,config);
 		getServer().getPluginManager().registerEvents(mpl, this);
-		//init rails ugfix listener
+		//init rails bugfix listener
 		rfl = new MFRailsFixListener(this,config);
 		getServer().getPluginManager().registerEvents(rfl, this);
 		}
@@ -99,6 +98,7 @@ public class Main extends JavaPlugin {
 		config.saveConfig();
 		config = null;
 		commandl = null;
+		HandlerList.unregisterAll(this);
 		tablel = null;
 		villagerl = null;
 		mpl = null;

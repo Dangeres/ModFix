@@ -17,8 +17,6 @@
 
 package modfix;
 
-import java.util.HashSet;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,17 +24,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 
-public class MFCommandListener implements  CommandExecutor, Listener {
+public class MFCommandListener implements  CommandExecutor{
 	@SuppressWarnings("unused")
 	private Main main;
 	private ModFixConfig config;
-	private HashSet<String> pleinfoswitch = new HashSet<String>();
-	
 	
 	MFCommandListener(Main main, ModFixConfig config) {
 		this.main = main;
@@ -85,11 +77,6 @@ public class MFCommandListener implements  CommandExecutor, Listener {
 		else if (args.length == 1 && args[0].equalsIgnoreCase("iinfo"))
 		{
 			displayItemInfo(sender);
-			return true;
-		}
-		else if (args.length == 1 && args[0].equalsIgnoreCase("einfo"))
-		{
-			displayEntityInfo(sender);
 			return true;
 		}
 		else if (args.length == 3 && args[0].equalsIgnoreCase("bagfix") && args[1].equalsIgnoreCase("add"))
@@ -157,20 +144,6 @@ public class MFCommandListener implements  CommandExecutor, Listener {
 		else
 		{
 			sender.sendMessage(ChatColor.BLUE+"А не может у тебя быть итема в руке, тыж консоль, у тебя и рук то нет");
-		}
-	}
-	
-	public void displayEntityInfo(CommandSender sender)
-	{
-		if (sender instanceof Player)
-		{
-			Player pl = (Player) sender;
-			pl.sendMessage(ChatColor.BLUE+"Кликните правой кнопкой мыши по Entity, для того чтобы узнать её Network ID");
-			pleinfoswitch.add(pl.getName());
-		}
-		else
-		{
-			sender.sendMessage(ChatColor.BLUE+"У консоли нет рук, она не может ударить Entity");
 		}
 	}
 	
@@ -260,16 +233,6 @@ public class MFCommandListener implements  CommandExecutor, Listener {
 		}
 	}
 	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onPlayerCheckEntityID(PlayerInteractEntityEvent e)
-	{
-		Player pl = e.getPlayer();
-		if (pleinfoswitch.contains(pl.getName()))
-		{
-			pl.sendMessage(ChatColor.BLUE+"NetworkID: "+e.getRightClicked().getType().getTypeId());
-			pleinfoswitch.remove(pl.getName());
-		}
-	}
 		
 }
 
