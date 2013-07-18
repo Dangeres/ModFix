@@ -48,7 +48,6 @@ public class ModFixConfig {
 	protected boolean enableMinecartFix = true;
 	protected boolean enableRailsFix = true;
 	protected HashSet<Integer> RailsIDs = new HashSet<Integer>();
-	protected boolean enableFreecamClickFix = true;
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
