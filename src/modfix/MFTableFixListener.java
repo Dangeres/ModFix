@@ -110,7 +110,6 @@ public class MFTableFixListener implements Listener {
 	{//Player can break opened block and then won't trigger inventory closing
 		if (!config.enableTablesFix) {return;}
 		
-		
 		Block br = e.getBlock();
 		if (protectblocks.containsKey(br))
 		{
