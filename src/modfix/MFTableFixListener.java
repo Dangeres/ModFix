@@ -18,9 +18,12 @@
 package modfix;
 
 import java.util.HashMap;
-
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -47,11 +50,13 @@ public class MFTableFixListener implements Listener {
 		this.main = main;
 		this.config = config;
 		initCloseInventoryFixListener();
+		scheduleCheckTask();
 	}
 	
 	
 	private HashMap<Block, String> protectblocks = new HashMap<Block, String>();
 	private HashMap<String, Block> backreference = new HashMap<String, Block>();
+	private HashMap<Block, Integer> matreference = new HashMap<Block, Integer>();
 	
 	//allow only one player to interact with table at a time
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -71,6 +76,7 @@ public class MFTableFixListener implements Listener {
 				{//Put block to list of protected blocks
 					protectblocks.put(binteract, pl.getName());
 					backreference.put(pl.getName(), binteract);
+					matreference.put(binteract, binteract.getTypeId());
 					return;
 				}
 				//If it's the same player let him open this (in case we lost something and block is still protected (this is really bad if this happened))
@@ -100,6 +106,7 @@ public class MFTableFixListener implements Listener {
 						{//gotcha, you closed table inventory
 						    protectblocks.remove(backreference.get(plname));
 						    backreference.remove(plname);
+						    matreference.remove(backreference.get(plname));
 						}
 				    }
 				});
@@ -116,11 +123,12 @@ public class MFTableFixListener implements Listener {
 			//check if user shouldn't be able to break this block
 			if (config.BrkTablesIDs.contains(getIDstring(br)))
 			{
-				e.getPlayer().sendMessage(ChatColor.RED + "Вы не можете сломать этот стол, по крайней мере сейчас");
+				e.getPlayer().sendMessage(ChatColor.RED + "Вы не можете сломать этот предмет, по крайней мере сейчас");
 				e.setCancelled(true);
 			} else {
 				backreference.remove(protectblocks.get(br));
 				protectblocks.remove(br);
+			    matreference.remove(br);
 			}
 		}
 	}
@@ -134,6 +142,7 @@ public class MFTableFixListener implements Listener {
 		{
 		    protectblocks.remove(backreference.get(plname));
 		    backreference.remove(plname);
+		    matreference.remove(backreference.get(plname));
 		}
 	}
 	
@@ -145,6 +154,7 @@ public class MFTableFixListener implements Listener {
 		{
 		    protectblocks.remove(backreference.get(plname));
 		    backreference.remove(plname);
+		    matreference.remove(backreference.get(plname));
 		}
 	}
 	
@@ -155,4 +165,49 @@ public class MFTableFixListener implements Listener {
 		if (bl.getData() !=0) {blstring += ":"+bl.getData();}
 		return blstring;
 	}
+	
+	
+	
+	private void scheduleCheckTask()
+	{
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
+		{
+			public void run()
+			{
+				if (!config.enableTablesFixExtendedCheck) {return;}
+				
+				for (Block b : protectblocks.keySet())
+				{
+					//block is destroed but we didn't caught this , because of lack of the bukkit events
+					//this means that someone is trying to duplicate items
+					//we must remove all drop near block to avoid this
+					if (b.getTypeId() != (matreference.get(b)))
+					{
+						deleteItemsNearBlock(b);
+					}
+				}
+			}
+		},0,1);
+	}
+	
+	private void deleteItemsNearBlock(final Block b)
+	{
+		//remove block from hashmaps
+		matreference.remove(b);
+		backreference.remove(protectblocks.get(b));
+		protectblocks.remove(b);
+		//remove all items
+		Entity fakeEntity = b.getWorld().spawnEntity(b.getLocation(), EntityType.ARROW);
+		for (Entity item :fakeEntity.getNearbyEntities(3, 3, 3))
+		{
+			if (item instanceof Item)
+			{
+				item.remove();
+			}
+		}
+		fakeEntity.remove();
+	}
+	
+	
+	
 }
