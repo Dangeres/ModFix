@@ -178,19 +178,19 @@ public class MFTableFixListener implements Listener {
 				
 				for (Block b : protectblocks.keySet())
 				{
-					//block is destroed but we didn't caught this , because of lack of the bukkit events
-					//this means that someone is trying to duplicate items
+					//block is destroyed but we didn't catch this , because of lack of the bukkit events for mods
+					//this means that someone is probably trying to duplicate items
 					//we must remove all drop near block to avoid this
 					if (b.getTypeId() != (matreference.get(b)))
 					{
-						deleteItemsNearBlock(b);
+						deleteDropNearBlock(b);
 					}
 				}
 			}
 		},0,1);
 	}
 	
-	private void deleteItemsNearBlock(final Block b)
+	private void deleteDropNearBlock(final Block b)
 	{
 		//remove block from hashmaps
 		matreference.remove(b);
@@ -198,7 +198,7 @@ public class MFTableFixListener implements Listener {
 		protectblocks.remove(b);
 		//remove all items
 		Entity fakeEntity = b.getWorld().spawnEntity(b.getLocation(), EntityType.ARROW);
-		for (Entity item :fakeEntity.getNearbyEntities(3, 3, 3))
+		for (Entity item : fakeEntity.getNearbyEntities(3, 3, 3))
 		{
 			if (item instanceof Item)
 			{
