@@ -94,9 +94,7 @@ public class MFCommandListener implements  CommandExecutor{
 				addIBlockId(sender);
 				return true;
 			}
-		}
-		else if (args.length == 3 && args[0].equalsIgnoreCase("tablefix") && args[1].equalsIgnoreCase("add"))
-		{
+			else
 			if (args[2].equalsIgnoreCase("bblock"))
 			{
 				addBBlockId(sender);
@@ -104,11 +102,13 @@ public class MFCommandListener implements  CommandExecutor{
 			}
 		}
 		else if (args.length == 3 && args[0].equalsIgnoreCase("expfix") && args[1].equalsIgnoreCase("add"))
+		{
 			if (args[2].equalsIgnoreCase("expblock"))
 			{
 				addExpBlockId(sender);
 				return true;
 			}
+		}
 		return false;
 	}
 	
