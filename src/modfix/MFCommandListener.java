@@ -119,7 +119,6 @@ public class MFCommandListener implements  CommandExecutor{
 	{
 		sender.sendMessage(ChatColor.AQUA+"/modfix reload "+ChatColor.WHITE+"-"+ChatColor.BLUE+" перезагрузить конфиг плагина");
 		sender.sendMessage(ChatColor.AQUA+"/modfix iinfo "+ChatColor.WHITE+"-"+ChatColor.BLUE+" получить id и subid итема в руке");
-		sender.sendMessage(ChatColor.AQUA+"/modfix einfo "+ChatColor.WHITE+"-"+ChatColor.BLUE+" получить Entity Network ID");
 		sender.sendMessage(ChatColor.AQUA+"/modfix bagfix add 19block"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса сумок (баг с кнопками 1-9)");
 		sender.sendMessage(ChatColor.AQUA+"/modfix tablefix add iblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса столов (баг с одновременно открытым у 2х человек столом)");
 		sender.sendMessage(ChatColor.AQUA+"/modfix tablefix add bblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса столов (баг с ломанием открытого стола )) Внимание: не спасает от слома стола предметами из модов");

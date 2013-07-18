@@ -43,6 +43,7 @@ public class ModFixConfig {
 	protected boolean enableTablesFix = true;
 	protected HashSet<String> IntTablesIDs= new HashSet<String>();
 	protected HashSet<String> BrkTablesIDs= new HashSet<String>();
+	protected boolean enableTablesFixExtendedCheck = true;
 	protected boolean enableExpFix = true;
 	protected HashSet<String> furnSlotIDs= new HashSet<String>();
 	protected boolean enableMinecartFix = true;
@@ -61,6 +62,7 @@ public class ModFixConfig {
 		enableTablesFix = config.getBoolean("TablesFix.enable",enableTablesFix);
 		IntTablesIDs = new HashSet<String>(config.getStringList("TablesFix.InteractBlockIDs"));
 		BrkTablesIDs = new HashSet<String>(config.getStringList("TablesFix.BreakBlockIDs"));
+		enableTablesFixExtendedCheck = config.getBoolean("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
 		enableExpFix = config.getBoolean("ExpFix.enable",enableExpFix);
 		furnSlotIDs = new HashSet<String>(config.getStringList("ExpFix.FurnaceIds"));
 		enableMinecartFix = config.getBoolean("MinecartPortalFix.enable", enableMinecartFix);
@@ -83,6 +85,7 @@ public class ModFixConfig {
 		config.set("TablesFix.enable",enableTablesFix);
 		config.set("TablesFix.InteractBlockIDs",new ArrayList<String>(IntTablesIDs));
 		config.set("TablesFix.BreakBlockIDs",new ArrayList<String>(BrkTablesIDs));
+		config.set("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
 		config.set("ExpFix.enable",enableExpFix);
 		config.set("ExpFix.FurnaceIds",new ArrayList<String>(furnSlotIDs));
 		config.set("MinecartPortalFix.enable", enableMinecartFix);
