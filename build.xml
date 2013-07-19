@@ -7,9 +7,10 @@
 	<target name="build">
         <mkdir dir="build/classes"/>
         <javac source="1.6" target="1.6" encoding="UTF-8" srcdir="src" destdir="build/classes" classpathref="libs"/>
-        <jar destfile="target/ModFix.jar" basedir="build/classes">
-            <fileset file="src/plugin.yml" />
-        </jar>
+		<copy todir="build/classes">
+     		<fileset file="src/plugin.yml" />
+		</copy>
+        <jar destfile="target/ModFix.jar" basedir="build/classes" />
 		<delete dir="build"/>
     </target>
 	
