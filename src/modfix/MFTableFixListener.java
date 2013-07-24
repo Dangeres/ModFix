@@ -18,6 +18,8 @@
 package modfix;
 
 import java.util.HashMap;
+import java.util.HashSet;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -170,7 +172,7 @@ public class MFTableFixListener implements Listener {
 			{
 				if (!config.enableTablesFixExtendedCheck) {return;}
 				
-				for (Block b : protectblocks.keySet())
+				for (Block b : new HashSet<Block>(protectblocks.keySet()))
 				{
 					//block is destroyed but we didn't catch this , because of lack of the bukkit events for mods
 					//this means that someone is probably trying to duplicate items
@@ -179,6 +181,10 @@ public class MFTableFixListener implements Listener {
 					{
 						deleteDropNearBlock(b);
 					}
+					//remove block from hashmaps
+					matreference.remove(b);
+					backreference.remove(protectblocks.get(b));
+					protectblocks.remove(b);
 				}
 			}
 		},0,1);
@@ -186,10 +192,6 @@ public class MFTableFixListener implements Listener {
 	
 	private void deleteDropNearBlock(final Block b)
 	{
-		//remove block from hashmaps
-		matreference.remove(b);
-		backreference.remove(protectblocks.get(b));
-		protectblocks.remove(b);
 		//remove all items
 		Entity fakeEntity = b.getWorld().spawnEntity(b.getLocation(), EntityType.ARROW);
 		for (Entity item : fakeEntity.getNearbyEntities(3, 3, 3))
