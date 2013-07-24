@@ -17,9 +17,6 @@
 
 package modfix;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -52,26 +49,13 @@ public class MFBagFixListener implements Listener {
 		if (config.enableBackPackFix) {
 			Player p = (Player) event.getEntity();
 			p.closeInventory();
-			if (config.fixcrop) 
+			if (config.enableCropanalyzerFix) 
 			{
-					List<ItemStack> itoremove = new ArrayList<ItemStack>();
-					int icount = 0;
-					for (ItemStack i : event.getDrops())
-					{
-						if (i.getTypeId() == config.CropanalyzerID)
-						{
-							itoremove.add(i);
-							icount++;
-						}
-					}
-					event.getDrops().removeAll(itoremove);
-					for (int i = 0; i<icount; i++)
-					{
-						ItemStack add = new ItemStack(config.CropanalyzerID);
-						{
-							event.getDrops().add(add);
-						}
-					}
+				if (p.getItemInHand().getTypeId() == config.CropanalyzerID)
+				{
+					event.getDrops().remove(p.getItemInHand());
+					event.getDrops().add(new ItemStack(config.CropanalyzerID));
+				}
 			}
 		}
 
@@ -107,23 +91,34 @@ public class MFBagFixListener implements Listener {
 				    	if (e.getPlayer().getName().contains("[")) {return;}
 				    	
 				    	if (!config.enableBackPackFix) {return;}
-				    	if (!(e.getPacketID() == Packets.Client.WINDOW_CLICK)) {return;}
 				    	Player pl = e.getPlayer();
 			    		//if item in hand is one of the bad ids - check buttons
 			    		if (config.BackPacks19IDs.contains(pl.getItemInHand().getTypeId())) {
-			    			{//check click type , 2 ==  1..9 buttons (e.getPacket().getIntegers().getValues().get(3) - action type)
-			    				if (e.getPacket().getIntegers().getValues().get(3) == 2)
-			    				{//check to which slot we want to move item (if to bag slot - block action)
-			    				//e.getPacket().getIntegers().getValues().get(2) - slot to move item which
-			    					if (pl.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
-			    					{
-					    				e.setCancelled(true);
-						    			e.getPlayer().updateInventory();
-			    					}
+			    			//restrict illegal bag moving
+			    			//check click type , 2 ==  1..9 buttons (e.getPacket().getIntegers().getValues().get(3) - action type)
+			    			if (e.getPacket().getIntegers().getValues().get(3) == 2)
+			    			{//check to which slot we want to move item (if to bag slot - block action)
+			    				if (pl.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
+			    				{
+					    			e.setCancelled(true);
+						    		e.getPlayer().updateInventory();
 			    				}
 			    			}
+				    		//restrict cropanalyzer moving
+				    		if (!config.enableCropanalyzerFix) {return;}
+				    		if (pl.getItemInHand().getTypeId() == config.CropanalyzerID)
+				    		{
+				    			if (e.getPacket().getIntegers().getValues().get(3) == 0 || e.getPacket().getIntegers().getValues().get(3) == 2)
+				    			{
+				    				//check which slot we clicked (if it is cropanalyzer slot - cancel action)
+				    				if (e.getPacket().getIntegers().getValues().get(1) == pl.getInventory().getHeldItemSlot()+3)
+				    				{
+				    					e.setCancelled(true);
+				    					e.getPlayer().updateInventory();
+				    				}
+				    			}
+				    		}
 				 	   	}
-
 				    }
 				});
 	}

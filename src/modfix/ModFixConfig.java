@@ -36,7 +36,7 @@ public class ModFixConfig {
 	protected boolean enableVillagersFix = true;
 	protected boolean enableBackPackFix = true;
 	protected HashSet<Integer> BackPacks19IDs = new HashSet<Integer>();
-	protected boolean fixcrop = true;
+	protected boolean enableCropanalyzerFix = true;
 	protected int CropanalyzerID = 30122;
 	protected boolean enableChunkUnloadFixTP = true;
 	protected boolean enableChunkUnloadFixMove = true;
@@ -58,7 +58,7 @@ public class ModFixConfig {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
 		enableBackPackFix = config.getBoolean("BackPackFix.enable",enableBackPackFix);
 		BackPacks19IDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.19BlockIDs"));
-		fixcrop = config.getBoolean("BackPackFix.CropanalyzerFix.enable",fixcrop);
+		enableCropanalyzerFix = config.getBoolean("BackPackFix.CropanalyzerFix.enable",enableCropanalyzerFix);
 		CropanalyzerID = config.getInt("BackPackFix.CropanalyzerFix.ID",CropanalyzerID);
 		enableVillagersFix = config.getBoolean("VillagersFix.enable",enableVillagersFix);
 		enableChunkUnloadFixTP = config.getBoolean("ChunkUnloadFix.enable.teleport",enableChunkUnloadFixTP);
@@ -85,7 +85,7 @@ public class ModFixConfig {
 		FileConfiguration config = new YamlConfiguration();
 		config.set("BackPackFix.enable",enableBackPackFix);
 		config.set("BackPackFix.19BlockIDs",new ArrayList<Integer>(BackPacks19IDs));
-		config.set("BackPackFix.CropanalyzerFix.enable",fixcrop);
+		config.set("BackPackFix.CropanalyzerFix.enable",enableCropanalyzerFix);
 		config.set("BackPackFix.CropanalyzerFix.ID",CropanalyzerID);
 		config.set("VillagersFix.enable",enableVillagersFix);
 		config.set("ChunkUnloadFix.enable.teleport",enableChunkUnloadFixTP);
