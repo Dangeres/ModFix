@@ -47,8 +47,11 @@ public class ModFixConfig {
 	protected boolean enableExpFix = true;
 	protected HashSet<String> furnSlotIDs= new HashSet<String>();
 	protected boolean enableMinecartFix = true;
+	protected HashSet<Short> minecartsIDs = new HashSet<Short>();
 	protected boolean enableRailsFix = true;
 	protected HashSet<Integer> RailsIDs = new HashSet<Integer>();
+	protected boolean enableRP2wiresfix = true;
+	protected HashSet<Integer> RP2WiresIDs = new HashSet<Integer>();
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
@@ -66,8 +69,11 @@ public class ModFixConfig {
 		enableExpFix = config.getBoolean("ExpFix.enable",enableExpFix);
 		furnSlotIDs = new HashSet<String>(config.getStringList("ExpFix.FurnaceIds"));
 		enableMinecartFix = config.getBoolean("MinecartPortalFix.enable", enableMinecartFix);
+		minecartsIDs = new HashSet<Short>(config.getShortList("MinecartPortalFix.cartsIDs"));
 		enableRailsFix = config.getBoolean("RailsFix.enable", enableRailsFix);
 		RailsIDs = new HashSet<Integer>(config.getIntegerList("RailsFix.railsIDs"));
+		enableRP2wiresfix = config.getBoolean("RP2WiresFix.enable", enableRP2wiresfix);
+		RP2WiresIDs = new HashSet<Integer>(config.getIntegerList("RP2WiresFix.wiresIDs"));
 				
 		saveConfig();
 	}
@@ -89,8 +95,11 @@ public class ModFixConfig {
 		config.set("ExpFix.enable",enableExpFix);
 		config.set("ExpFix.FurnaceIds",new ArrayList<String>(furnSlotIDs));
 		config.set("MinecartPortalFix.enable", enableMinecartFix);
+		config.set("MinecartPortalFix.cartsIDs",new ArrayList<Short>(minecartsIDs));
 		config.set("RailsFix.enable", enableRailsFix);
 		config.set("RailsFix.railsIDs",new ArrayList<Integer>(RailsIDs));
+		config.set("RP2WiresFix.enable", enableRP2wiresfix);
+		config.set("RP2WiresFix.wiresIDs",new ArrayList<Integer>(RP2WiresIDs));
 		try {
 			config.save(new File("plugins/ModFix/config.yml"));
 		} catch (IOException e) {

@@ -17,6 +17,8 @@
 
 package modfix;
 
+import java.util.HashSet;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,8 +26,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
-public class MFCommandListener implements  CommandExecutor{
+public class MFCommandListener implements  CommandExecutor,Listener{
 	@SuppressWarnings("unused")
 	private Main main;
 	private ModFixConfig config;
@@ -35,6 +43,9 @@ public class MFCommandListener implements  CommandExecutor{
 		this.config = config;
 	}
 
+	
+	private HashSet<String> pleinfoswitch = new HashSet<String>();
+	private HashSet<String> plbinfoswitch = new HashSet<String>();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String arg2,
@@ -79,35 +90,14 @@ public class MFCommandListener implements  CommandExecutor{
 			displayItemInfo(sender);
 			return true;
 		}
-		else if (args.length == 3 && args[0].equalsIgnoreCase("bagfix") && args[1].equalsIgnoreCase("add"))
+		else if (args.length == 1 && args[0].equalsIgnoreCase("binfo"))
 		{
-			if (args[2].equalsIgnoreCase("19block"))
-			{
-				addBag19Id(sender);
-				return true;
-			}
+			displayBlockInfo(sender);
 		}
-		else if (args.length == 3 && args[0].equalsIgnoreCase("tablefix") && args[1].equalsIgnoreCase("add"))
+		else if (args.length == 1 && args[0].equalsIgnoreCase("einfo"))
 		{
-			if (args[2].equalsIgnoreCase("iblock"))
-			{
-				addIBlockId(sender);
-				return true;
-			}
-			else
-			if (args[2].equalsIgnoreCase("bblock"))
-			{
-				addBBlockId(sender);
-				return true;
-			}
-		}
-		else if (args.length == 3 && args[0].equalsIgnoreCase("expfix") && args[1].equalsIgnoreCase("add"))
-		{
-			if (args[2].equalsIgnoreCase("expblock"))
-			{
-				addExpBlockId(sender);
-				return true;
-			}
+			displayEntityInfo(sender);
+			return true;
 		}
 		return false;
 	}
@@ -119,10 +109,8 @@ public class MFCommandListener implements  CommandExecutor{
 	{
 		sender.sendMessage(ChatColor.AQUA+"/modfix reload "+ChatColor.WHITE+"-"+ChatColor.BLUE+" перезагрузить конфиг плагина");
 		sender.sendMessage(ChatColor.AQUA+"/modfix iinfo "+ChatColor.WHITE+"-"+ChatColor.BLUE+" получить id и subid итема в руке");
-		sender.sendMessage(ChatColor.AQUA+"/modfix bagfix add 19block"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса сумок (баг с кнопками 1-9)");
-		sender.sendMessage(ChatColor.AQUA+"/modfix tablefix add iblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса столов (баг с одновременно открытым у 2х человек столом)");
-		sender.sendMessage(ChatColor.AQUA+"/modfix tablefix add bblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса столов (баг с ломанием открытого стола )) Внимание: не спасает от слома стола предметами из модов");
-		sender.sendMessage(ChatColor.AQUA+"/modfix expfix add expblock"+ChatColor.WHITE+"-"+ChatColor.BLUE+" добавляет предмет в руке к списку фикса опыта из печек (баг с помещением итема в Result slot)");
+		sender.sendMessage(ChatColor.AQUA+"/modfix einfo "+ChatColor.WHITE+"-"+ChatColor.BLUE+" получить Network ID entity через ПКМ");
+		sender.sendMessage(ChatColor.AQUA+"/modfix binfo "+ChatColor.WHITE+"-"+ChatColor.BLUE+" получить id блока после ПКМ");
 	}
 	
 	private void displayItemInfo(CommandSender sender)
@@ -142,95 +130,67 @@ public class MFCommandListener implements  CommandExecutor{
 		}
 		else
 		{
-			sender.sendMessage(ChatColor.BLUE+"А не может у тебя быть итема в руке, тыж консоль, у тебя и рук то нет");
+			sender.sendMessage(ChatColor.BLUE+"У консоли нет рук");
 		}
 	}
 	
-	private void addBag19Id(CommandSender sender)
+	public void displayBlockInfo(CommandSender sender)
 	{
 		if (sender instanceof Player)
 		{
 			Player pl = (Player) sender;
-			config.BackPacks19IDs.add(pl.getItemInHand().getTypeId());
-			config.saveConfig();
-			pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
+			pl.sendMessage(ChatColor.BLUE+"Кликните правой кнопкой мыши по блоку, для того чтобы узнать его ID");
+			plbinfoswitch.add(pl.getName());
 		}
 		else
 		{
-			sender.sendMessage(ChatColor.BLUE+"А не может у тебя быть итема в руке, тыж консоль, у тебя и рук то нет");
+			sender.sendMessage(ChatColor.BLUE+"У консоли нет рук");
 		}
 	}
 	
-	private void addIBlockId(CommandSender sender)
+	public void displayEntityInfo(CommandSender sender)
 	{
 		if (sender instanceof Player)
 		{
 			Player pl = (Player) sender;
-			
-			String add = String.valueOf(pl.getItemInHand().getTypeId());
-			if (pl.getItemInHand().getDurability() !=0) {add += ":"+pl.getItemInHand().getDurability();}
-			
-			config.IntTablesIDs.add(add);
-			config.saveConfig();
-			pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
+			pl.sendMessage(ChatColor.BLUE+"Кликните правой кнопкой мыши по Entity, для того чтобы узнать её Network ID");
+			pleinfoswitch.add(pl.getName());
 		}
 		else
 		{
-			sender.sendMessage(ChatColor.BLUE+"А не может у тебя быть итема в руке, тыж консоль, у тебя и рук то нет");
+			sender.sendMessage(ChatColor.BLUE+"У консоли нет рук");
 		}
 	}
 	
-	private void addBBlockId(CommandSender sender)
+
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onPlayerCheckEntityID(PlayerInteractEntityEvent e)
 	{
-		if (sender instanceof Player)
+		Player pl = e.getPlayer();
+		if (pleinfoswitch.contains(pl.getName()))
 		{
-			Player pl = (Player) sender;
-			
-			String add = String.valueOf(pl.getItemInHand().getTypeId());
-			if (pl.getItemInHand().getDurability() !=0) {add += ":"+pl.getItemInHand().getDurability();}
-			
-			config.IntTablesIDs.add(add);
-			config.BrkTablesIDs.add(add);
-			config.saveConfig();
-			pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
-		}
-		else
-		{
-			sender.sendMessage(ChatColor.BLUE+"А не может у тебя быть итема в руке, тыж консоль, у тебя и рук то нет");
+			pl.sendMessage(ChatColor.BLUE+"NetworkID: "+e.getRightClicked().getType().getTypeId());
+			pleinfoswitch.remove(pl.getName());
+			e.setCancelled(true);
 		}
 	}
-	private void addExpBlockId(CommandSender sender)
+	
+
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onPlayerCheckBlockID(PlayerInteractEvent e)
 	{
-		if (sender instanceof Player)
+		if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) {return;}
+		
+		Player pl = e.getPlayer();
+		if (pleinfoswitch.contains(pl.getName()))
 		{
-			Player pl = (Player) sender;
-			
-			String add = String.valueOf(pl.getItemInHand().getTypeId());
-			if (pl.getItemInHand().getDurability() !=0) {add += ":"+pl.getItemInHand().getDurability();}
-			
-			if (pl.getItemInHand().getTypeId() == 62 || pl.getItemInHand().getTypeId() == 61) //noramal furnace has ids from 62:2 to 62:5 when placed
-			{
-				config.furnSlotIDs.add("61:2");
-				config.furnSlotIDs.add("61:3");
-				config.furnSlotIDs.add("61:4");
-				config.furnSlotIDs.add("61:5");
-				config.furnSlotIDs.add("62:2");
-				config.furnSlotIDs.add("62:3");
-				config.furnSlotIDs.add("62:4");
-				config.furnSlotIDs.add("62:5");
-			}
-			else 
-			{
-			config.furnSlotIDs.add(add);
-			}
-			config.saveConfig();
-			pl.sendMessage(ChatColor.BLUE+"Предмет добавлен в список");
+			pl.sendMessage(ChatColor.BLUE+"Block id: "+e.getClickedBlock().getTypeId());
+			pleinfoswitch.remove(pl.getName());
+			e.setCancelled(true);
 		}
-		else
-		{
-			sender.sendMessage(ChatColor.BLUE+"А не может у тебя быть итема в руке, тыж консоль, у тебя и рук то нет");
-		}
+		
 	}
+
 	
 		
 }

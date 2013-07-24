@@ -39,8 +39,9 @@ public class Main extends JavaPlugin {
 	private MFVillagerFixListener villagerl;
 	private MFChunkFixListener chunkl;
 	private MFExpFixListener expl;
-	private MFMinecartPortalListener mpl;
+	private MFMinecartFreecamOpenFixListener mpl;
 	private MFRailsFixListener rfl;	
+	private MFRP2FixListener rp2l;
 	
 	public ProtocolManager protocolManager = null;
 	private boolean enableself = true;
@@ -67,6 +68,7 @@ public class Main extends JavaPlugin {
 		//init command listener
 		commandl = new MFCommandListener(this,config);
 		getCommand("modfix").setExecutor(commandl);
+		getServer().getPluginManager().registerEvents(commandl, this);
 		//init bag bugfix listener
 		bagl = new MFBagFixListener(this,config);
 		getServer().getPluginManager().registerEvents(bagl, this);
@@ -83,11 +85,13 @@ public class Main extends JavaPlugin {
 		expl = new MFExpFixListener(this,config);
 		getServer().getPluginManager().registerEvents(expl, this);
 		//init minecart bugfix listener
-		mpl = new MFMinecartPortalListener(this,config);
+		mpl = new MFMinecartFreecamOpenFixListener(this,config);
 		getServer().getPluginManager().registerEvents(mpl, this);
 		//init rails bugfix listener
 		rfl = new MFRailsFixListener(this,config);
 		getServer().getPluginManager().registerEvents(rfl, this);
+		rp2l = new MFRP2FixListener(this,config);
+		getServer().getPluginManager().registerEvents(rp2l, this);
 		}
 	}
 	
@@ -103,6 +107,7 @@ public class Main extends JavaPlugin {
 		villagerl = null;
 		mpl = null;
 		rfl = null;
+		rp2l = null;
 		protocolManager.removePacketListeners(this);
 		protocolManager = null;
 		}
