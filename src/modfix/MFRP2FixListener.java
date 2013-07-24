@@ -36,11 +36,11 @@ public class MFRP2FixListener implements Listener {
 	}
 	
 	private boolean isRP2WiresNear(Block b)
-	{
+	{	
 		if (
-			config.RP2WiresIDs.contains(b.getRelative(BlockFace.DOWN)) || config.RP2WiresIDs.contains(b.getRelative(BlockFace.UP))
-			|| config.RP2WiresIDs.contains(b.getRelative(BlockFace.NORTH)) || config.RP2WiresIDs.contains(b.getRelative(BlockFace.SOUTH))
-			|| config.RP2WiresIDs.contains(b.getRelative(BlockFace.WEST)) || config.RP2WiresIDs.contains(b.getRelative(BlockFace.EAST))
+			config.RP2WiresIDs.contains(b.getRelative(BlockFace.DOWN,1).getTypeId()) || config.RP2WiresIDs.contains(b.getRelative(BlockFace.UP,1).getTypeId())
+			|| config.RP2WiresIDs.contains(b.getRelative(BlockFace.NORTH,1).getTypeId()) || config.RP2WiresIDs.contains(b.getRelative(BlockFace.SOUTH,1).getTypeId())
+			|| config.RP2WiresIDs.contains(b.getRelative(BlockFace.WEST,1).getTypeId()) || config.RP2WiresIDs.contains(b.getRelative(BlockFace.EAST,1).getTypeId())
 		)
 		{
 			return true;
