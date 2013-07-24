@@ -68,6 +68,7 @@ public class ModFixConfig {
 		enableTablesFix = config.getBoolean("TablesFix.enable",enableTablesFix);
 		IntTablesIDs = new HashSet<String>(config.getStringList("TablesFix.InteractBlockIDs"));
 		BrkTablesIDs = new HashSet<String>(config.getStringList("TablesFix.BreakBlockIDs"));
+		IntTablesIDs.addAll(BrkTablesIDs);
 		enableTablesFixExtendedCheck = config.getBoolean("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
 		enableExpFix = config.getBoolean("ExpFix.enable",enableExpFix);
 		furnSlotIDs = new HashSet<String>(config.getStringList("ExpFix.FurnaceIds"));
