@@ -72,7 +72,7 @@ public class MFTableFixListener implements Listener {
 			Player pl = e.getPlayer();
 			Block binteract = e.getClickedBlock();
 			String checkid = Utils.getIDstring(binteract);
-			if (config.IntTablesIDs.contains(checkid) || config.BrkTablesIDs.contains(checkid))
+			if (config.IntTablesIDs.contains(checkid))
 			{
 				if (protectblocks.get(binteract) == null)
 				{//Put block to list of protected blocks
@@ -85,11 +85,8 @@ public class MFTableFixListener implements Listener {
 				if (pl.getName().equals(protectblocks.get(binteract))) {return;}
 
 				//We reached here, if itemid is in the Interact list we will disallow interact
-				if (config.IntTablesIDs.contains(checkid))
-				{
-					pl.sendMessage(ChatColor.RED + "Вы не можете открыть этот предмет, по крайней мере сейчас");
-					e.setCancelled(true);
-				}
+				pl.sendMessage(ChatColor.RED + "Вы не можете открыть этот предмет, по крайней мере сейчас");
+				e.setCancelled(true);
 			}
 		}
 	}
