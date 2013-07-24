@@ -69,7 +69,7 @@ public class MFTableFixListener implements Listener {
 		{
 			Player pl = e.getPlayer();
 			Block binteract = e.getClickedBlock();
-			String checkid = getIDstring(binteract);
+			String checkid = Utils.getIDstring(binteract);
 			if (config.IntTablesIDs.contains(checkid) || config.BrkTablesIDs.contains(checkid))
 			{
 				if (protectblocks.get(binteract) == null)
@@ -124,7 +124,7 @@ public class MFTableFixListener implements Listener {
 		if (protectblocks.containsKey(br))
 		{
 			//check if user shouldn't be able to break this block
-			if (config.BrkTablesIDs.contains(getIDstring(br)))
+			if (config.BrkTablesIDs.contains(Utils.getIDstring(br)))
 			{
 				e.getPlayer().sendMessage(ChatColor.RED + "Вы не можете сломать этот предмет, по крайней мере сейчас");
 				e.setCancelled(true);
@@ -160,16 +160,7 @@ public class MFTableFixListener implements Listener {
 		    matreference.remove(backreference.get(plname));
 		}
 	}
-	
-	
-	private String getIDstring(Block bl)
-	{
-		String blstring = String.valueOf(bl.getTypeId());
-		if (bl.getData() !=0) {blstring += ":"+bl.getData();}
-		return blstring;
-	}
-	
-	
+		
 	
 	private void scheduleCheckTask()
 	{

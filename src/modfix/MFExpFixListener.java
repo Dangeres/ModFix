@@ -2,7 +2,6 @@ package modfix;
 
 import java.util.HashSet;
 
-import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -41,8 +40,7 @@ public class MFExpFixListener implements Listener {
 	
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
-
-			String checkid = getIDstring(e.getClickedBlock());
+			String checkid = Utils.getIDstring(e.getClickedBlock());
 			if (config.furnSlotIDs.contains(checkid))
 			{
 				plinf.add(e.getPlayer().getName());
@@ -104,11 +102,4 @@ public class MFExpFixListener implements Listener {
 		}
 	}
 	
-	
-	private String getIDstring(Block bl)
-	{
-		String blstring = String.valueOf(bl.getTypeId());
-		if (bl.getData() !=0) {blstring += ":"+bl.getData();}
-		return blstring;
-	}
 }
