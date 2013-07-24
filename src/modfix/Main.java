@@ -42,6 +42,7 @@ public class Main extends JavaPlugin {
 	private MFMinecartFreecamOpenFixListener mpl;
 	private MFRailsFixListener rfl;	
 	private MFRP2FixListener rp2l;
+	private MFFreecamInventoryOpenFix fciol;
 	
 	public ProtocolManager protocolManager = null;
 	private boolean enableself = true;
@@ -62,36 +63,38 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		if (enableself) {
-		//init config
-		config = new ModFixConfig(this);
-		config.loadConfig();
-		//init command listener
-		commandl = new MFCommandListener(this,config);
-		getCommand("modfix").setExecutor(commandl);
-		getServer().getPluginManager().registerEvents(commandl, this);
-		//init bag bugfix listener
-		bagl = new MFBagFixListener(this,config);
-		getServer().getPluginManager().registerEvents(bagl, this);
-		//init table bugfix listener
-		tablel = new MFTableFixListener(this,config);
-		getServer().getPluginManager().registerEvents(tablel, this);
-		//init villager bugfix listener
-		villagerl = new MFVillagerFixListener(this,config);
-		getServer().getPluginManager().registerEvents(villagerl, this);
-        //init chunk bugfix listener
-		chunkl = new MFChunkFixListener(this,config);
-		getServer().getPluginManager().registerEvents(chunkl, this);
-        //init exp bugfix listener
-		expl = new MFExpFixListener(this,config);
-		getServer().getPluginManager().registerEvents(expl, this);
-		//init minecart bugfix listener
-		mpl = new MFMinecartFreecamOpenFixListener(this,config);
-		getServer().getPluginManager().registerEvents(mpl, this);
-		//init rails bugfix listener
-		rfl = new MFRailsFixListener(this,config);
-		getServer().getPluginManager().registerEvents(rfl, this);
-		rp2l = new MFRP2FixListener(this,config);
-		getServer().getPluginManager().registerEvents(rp2l, this);
+			//init config
+			config = new ModFixConfig(this);
+			config.loadConfig();
+			//init command listener
+			commandl = new MFCommandListener(this,config);
+			getCommand("modfix").setExecutor(commandl);
+			getServer().getPluginManager().registerEvents(commandl, this);
+			//init bag bugfix listener
+			bagl = new MFBagFixListener(this,config);
+			getServer().getPluginManager().registerEvents(bagl, this);
+			//init table bugfix listener
+			tablel = new MFTableFixListener(this,config);
+			getServer().getPluginManager().registerEvents(tablel, this);
+			//init villager bugfix listener
+			villagerl = new MFVillagerFixListener(this,config);
+			getServer().getPluginManager().registerEvents(villagerl, this);
+			//init chunk bugfix listener
+			chunkl = new MFChunkFixListener(this,config);
+			getServer().getPluginManager().registerEvents(chunkl, this);
+			//init exp bugfix listener
+			expl = new MFExpFixListener(this,config);
+			getServer().getPluginManager().registerEvents(expl, this);
+			//init minecart bugfix listener
+			mpl = new MFMinecartFreecamOpenFixListener(this,config);
+			getServer().getPluginManager().registerEvents(mpl, this);
+			//init rails bugfix listener
+			rfl = new MFRailsFixListener(this,config);
+			getServer().getPluginManager().registerEvents(rfl, this);
+			rp2l = new MFRP2FixListener(this,config);
+			getServer().getPluginManager().registerEvents(rp2l, this);
+			fciol = new MFFreecamInventoryOpenFix(this,config);
+			getServer().getPluginManager().registerEvents(fciol, this);
 		}
 	}
 	
@@ -108,6 +111,7 @@ public class Main extends JavaPlugin {
 		mpl = null;
 		rfl = null;
 		rp2l = null;
+		fciol = null;
 		protocolManager.removePacketListeners(this);
 		protocolManager = null;
 		}

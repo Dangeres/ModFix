@@ -53,6 +53,8 @@ public class ModFixConfig {
 	protected HashSet<Integer> RailsIDs = new HashSet<Integer>();
 	protected boolean enableRP2wiresfix = true;
 	protected HashSet<Integer> RP2WiresIDs = new HashSet<Integer>();
+	protected boolean enableFreecamFix = true;
+	protected HashSet<String> freecamBlockIDs = new HashSet<String>();
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
@@ -76,6 +78,8 @@ public class ModFixConfig {
 		RailsIDs = new HashSet<Integer>(config.getIntegerList("RailsFix.railsIDs"));
 		enableRP2wiresfix = config.getBoolean("RP2WiresFix.enable", enableRP2wiresfix);
 		RP2WiresIDs = new HashSet<Integer>(config.getIntegerList("RP2WiresFix.wiresIDs"));
+		enableFreecamFix = config.getBoolean("FreeCamInvFix.enable",enableFreecamFix);
+		freecamBlockIDs = new HashSet<String>(config.getStringList("FreeCamInvFix.checkBlockIDs"));
 				
 		saveConfig();
 	}
@@ -103,6 +107,8 @@ public class ModFixConfig {
 		config.set("RailsFix.railsIDs",new ArrayList<Integer>(RailsIDs));
 		config.set("RP2WiresFix.enable", enableRP2wiresfix);
 		config.set("RP2WiresFix.wiresIDs",new ArrayList<Integer>(RP2WiresIDs));
+		config.set("FreeCamInvFix.enable",enableFreecamFix);
+		config.set("FreeCamInvFix.checkBlockIDs",new ArrayList<String>(freecamBlockIDs));
 		try {
 			config.save(new File("plugins/ModFix/config.yml"));
 		} catch (IOException e) {
