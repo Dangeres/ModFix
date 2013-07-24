@@ -93,6 +93,7 @@ public class MFCommandListener implements  CommandExecutor,Listener{
 		else if (args.length == 1 && args[0].equalsIgnoreCase("binfo"))
 		{
 			displayBlockInfo(sender);
+			return true;
 		}
 		else if (args.length == 1 && args[0].equalsIgnoreCase("einfo"))
 		{
