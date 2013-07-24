@@ -182,10 +182,10 @@ public class MFCommandListener implements  CommandExecutor,Listener{
 		if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) {return;}
 		
 		Player pl = e.getPlayer();
-		if (pleinfoswitch.contains(pl.getName()))
+		if (plbinfoswitch.contains(pl.getName()))
 		{
 			pl.sendMessage(ChatColor.BLUE+"Block id: "+e.getClickedBlock().getTypeId());
-			pleinfoswitch.remove(pl.getName());
+			plbinfoswitch.remove(pl.getName());
 			e.setCancelled(true);
 		}
 		
