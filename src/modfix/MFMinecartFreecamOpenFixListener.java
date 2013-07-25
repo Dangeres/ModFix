@@ -1,7 +1,9 @@
 package modfix;
 
 import java.util.HashMap;
+
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -51,12 +53,11 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 				    	
 						if (!config.enableMinecartFix) {return;}
 				    
-						String plname = e.getPlayer().getName();
-						
-						if (playersopenedminecart.containsKey(plname))
+						Player pl = e.getPlayer();
+						if (playersopenedminecart.containsKey(pl.getName()))
 						{
-							Entity ent = playersopenedminecart.get(plname);
-							if (!ent.isValid() || ent.getLocation().distanceSquared(e.getPlayer().getLocation()) > 36 || !ent.getWorld().equals(e.getPlayer().getWorld()))
+							Entity ent = playersopenedminecart.get(pl.getName());
+							if (!ent.isValid() || ent.getLocation().distanceSquared(pl.getLocation()) > 36 || !ent.getWorld().equals(pl.getWorld()))
 							{
 								e.setCancelled(true);
 								e.getPlayer().closeInventory();
