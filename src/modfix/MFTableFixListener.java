@@ -100,10 +100,7 @@ public class MFTableFixListener implements Listener {
 				  ListenerPriority.HIGHEST, Packets.Client.CLOSE_WINDOW) {
 					@Override
 				    public void onPacketReceiving(PacketEvent e) {
-						
-				    	if (e.getPlayer().getName().contains("[")) {return;}
-				    	
-						String plname = e.getPlayer().getName();
+					String plname = e.getPlayer().getName();
 					if (backreference.containsKey(plname))
 						{//gotcha, you closed table inventory
 						    protectblocks.remove(backreference.get(plname));

@@ -86,9 +86,6 @@ public class MFFreecamInventoryOpenFix implements Listener {
 				  ListenerPriority.HIGHEST, Packets.Client.CLOSE_WINDOW) {
 					@Override
 				    public void onPacketReceiving(PacketEvent e) {
-						
-				    if (e.getPlayer().getName().contains("[")) {return;}
-				    
 			    	String pl = e.getPlayer().getName();
 			    	if (backreference.containsKey(pl))
 			    	{
@@ -112,9 +109,6 @@ public class MFFreecamInventoryOpenFix implements Listener {
 				  ListenerPriority.HIGHEST, Packets.Server.CLOSE_WINDOW) {
 					@Override
 				    public void onPacketSending(PacketEvent e) {
-						
-				    	if (e.getPlayer().getName().contains("[")) {return;}
-
 				    	String pl = e.getPlayer().getName();
 				    	if (backreference.containsKey(pl))
 				    	{

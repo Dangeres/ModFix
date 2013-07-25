@@ -87,10 +87,8 @@ public class MFBagFixListener implements Listener {
 				    @SuppressWarnings("deprecation")
 					@Override
 				    public void onPacketReceiving(PacketEvent e) {
-				    	
-				    	if (e.getPlayer().getName().contains("[")) {return;}
-				    	
 				    	if (!config.enableBackPackFix) {return;}
+				    	
 				    	Player pl = e.getPlayer();
 			    		//if item in hand is one of the bad ids - check buttons
 			    		if (config.BackPacks19IDs.contains(pl.getItemInHand().getTypeId())) {

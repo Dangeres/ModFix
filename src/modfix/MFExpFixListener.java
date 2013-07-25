@@ -67,9 +67,6 @@ public class MFExpFixListener implements Listener {
 				  ListenerPriority.HIGHEST, Packets.Client.CLOSE_WINDOW) {
 					@Override
 				    public void onPacketReceiving(PacketEvent e) {
-						
-				    	if (e.getPlayer().getName().contains("[")) {return;}
-				    	
 						plinf.remove(e.getPlayer().getName());
 				    }
 				});
@@ -83,9 +80,6 @@ public class MFExpFixListener implements Listener {
 				  ListenerPriority.HIGHEST, Packets.Server.CLOSE_WINDOW) {
 					@Override
 				    public void onPacketSending(PacketEvent e) {
-						
-				    	if (e.getPlayer().getName().contains("[")) {return;}
-				    	
 						plinf.remove(e.getPlayer().getName());
 				    }
 				});
