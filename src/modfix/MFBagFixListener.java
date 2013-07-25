@@ -22,7 +22,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -58,20 +57,12 @@ public class MFBagFixListener implements Listener {
 				}
 			}
 		}
-
 	}
+	
 	
 	//close inventory on quit
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerExit(PlayerQuitEvent event) {
-		if (config.enableBackPackFix) {
-					event.getPlayer().closeInventory();
-			}
-	}
-	
-	//close inventory on kick
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onPlayerKick(PlayerKickEvent event) {
 		if (config.enableBackPackFix) {
 					event.getPlayer().closeInventory();
 			}
@@ -119,6 +110,5 @@ public class MFBagFixListener implements Listener {
 				 	   	}
 				    }
 				});
-	}
-
+	}	
 }

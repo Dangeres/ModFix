@@ -33,7 +33,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.comphenix.protocol.Packets;
@@ -136,18 +135,6 @@ public class MFTableFixListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerQuit(PlayerQuitEvent e)
 	{//player can quit without closing table inventory, let's check it
-		String plname = e.getPlayer().getName();
-		if (backreference.containsKey(plname))
-		{
-		    protectblocks.remove(backreference.get(plname));
-		    backreference.remove(plname);
-		    matreference.remove(backreference.get(plname));
-		}
-	}
-	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onPlayerKick(PlayerKickEvent e)
-	{//player can be kicked without closing table inventory, let's check it
 		String plname = e.getPlayer().getName();
 		if (backreference.containsKey(plname))
 		{
