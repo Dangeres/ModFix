@@ -110,8 +110,8 @@ public class MFCommandListener implements  CommandExecutor,Listener{
 	{
 		sender.sendMessage(ChatColor.AQUA+"/modfix reload "+ChatColor.WHITE+"-"+ChatColor.BLUE+" перезагрузить конфиг плагина");
 		sender.sendMessage(ChatColor.AQUA+"/modfix iinfo "+ChatColor.WHITE+"-"+ChatColor.BLUE+" получить id и subid итема в руке");
-		sender.sendMessage(ChatColor.AQUA+"/modfix einfo "+ChatColor.WHITE+"-"+ChatColor.BLUE+" получить Network ID entity через ПКМ");
-		sender.sendMessage(ChatColor.AQUA+"/modfix binfo "+ChatColor.WHITE+"-"+ChatColor.BLUE+" получить id блока после ПКМ");
+		sender.sendMessage(ChatColor.AQUA+"/modfix einfo "+ChatColor.WHITE+"-"+ChatColor.BLUE+" получить Entity Type ID entity через ПКМ");
+		sender.sendMessage(ChatColor.AQUA+"/modfix binfo "+ChatColor.WHITE+"-"+ChatColor.BLUE+" получить id и subid блока после ПКМ");
 	}
 	
 	private void displayItemInfo(CommandSender sender)
@@ -119,15 +119,12 @@ public class MFCommandListener implements  CommandExecutor,Listener{
 		if (sender instanceof Player)
 		{
 			Player pl = (Player) sender;
-			String subid;
+			String msg =ChatColor.BLUE+"Item id: "+pl.getItemInHand().getTypeId();
 			if (pl.getItemInHand().getDurability() !=0 )
 			{
-				subid = String.valueOf(pl.getItemInHand().getDurability());
-			} else
-			{
-				subid = "Отсутствует";
-			}	
-			pl.sendMessage(ChatColor.BLUE+"id итема: "+pl.getItemInHand().getTypeId() + ", subid итема: "+ subid);
+				msg+=", subid: "+pl.getItemInHand().getDurability();
+			}
+			pl.sendMessage(msg);
 		}
 		else
 		{
@@ -140,7 +137,7 @@ public class MFCommandListener implements  CommandExecutor,Listener{
 		if (sender instanceof Player)
 		{
 			Player pl = (Player) sender;
-			pl.sendMessage(ChatColor.BLUE+"Кликните правой кнопкой мыши по блоку, для того чтобы узнать его ID");
+			pl.sendMessage(ChatColor.BLUE+"Кликните правой кнопкой мыши по блоку, для того чтобы узнать его ID и subID");
 			plbinfoswitch.add(pl.getName());
 		}
 		else
@@ -154,7 +151,7 @@ public class MFCommandListener implements  CommandExecutor,Listener{
 		if (sender instanceof Player)
 		{
 			Player pl = (Player) sender;
-			pl.sendMessage(ChatColor.BLUE+"Кликните правой кнопкой мыши по Entity, для того чтобы узнать её Network ID");
+			pl.sendMessage(ChatColor.BLUE+"Кликните правой кнопкой мыши по Entity, для того чтобы узнать её Type ID");
 			pleinfoswitch.add(pl.getName());
 		}
 		else
@@ -170,7 +167,7 @@ public class MFCommandListener implements  CommandExecutor,Listener{
 		Player pl = e.getPlayer();
 		if (pleinfoswitch.contains(pl.getName()))
 		{
-			pl.sendMessage(ChatColor.BLUE+"NetworkID: "+e.getRightClicked().getType().getTypeId());
+			pl.sendMessage(ChatColor.BLUE+"Entity Type ID: "+e.getRightClicked().getType().getTypeId());
 			pleinfoswitch.remove(pl.getName());
 			e.setCancelled(true);
 		}
@@ -185,7 +182,12 @@ public class MFCommandListener implements  CommandExecutor,Listener{
 		Player pl = e.getPlayer();
 		if (plbinfoswitch.contains(pl.getName()))
 		{
-			pl.sendMessage(ChatColor.BLUE+"Block id: "+e.getClickedBlock().getTypeId());
+			String msg = ChatColor.BLUE+"Block id: "+e.getClickedBlock().getTypeId();
+			if (e.getClickedBlock().getData() !=0)
+			{
+				msg+=", subid: "+e.getClickedBlock().getData();
+			}
+			pl.sendMessage(msg);
 			plbinfoswitch.remove(pl.getName());
 			e.setCancelled(true);
 		}
