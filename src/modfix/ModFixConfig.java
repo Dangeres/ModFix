@@ -48,7 +48,6 @@ public class ModFixConfig {
 	protected HashSet<String> furnSlotIDs= new HashSet<String>();
 	protected boolean enableMinecartFix = true;
 	protected HashSet<Short> minecartsIDs = new HashSet<Short>();
-	protected boolean enableMinecartRestrictOpenInVehicle = true;
 	protected boolean enableRailsFix = true;
 	protected HashSet<Integer> RailsIDs = new HashSet<Integer>();
 	protected boolean enableRP2wiresfix = true;
@@ -74,7 +73,6 @@ public class ModFixConfig {
 		furnSlotIDs = new HashSet<String>(config.getStringList("ExpFix.FurnaceIds"));
 		enableMinecartFix = config.getBoolean("MinecartPortalFix.enable", enableMinecartFix);
 		minecartsIDs = new HashSet<Short>(config.getShortList("MinecartPortalFix.cartsIDs"));
-		enableMinecartRestrictOpenInVehicle = config.getBoolean("MinecartPortalFix.restrictOpenInVehicle.enable",enableMinecartRestrictOpenInVehicle);
 		enableRailsFix = config.getBoolean("RailsFix.enable", enableRailsFix);
 		RailsIDs = new HashSet<Integer>(config.getIntegerList("RailsFix.railsIDs"));
 		enableRP2wiresfix = config.getBoolean("RP2WiresFix.enable", enableRP2wiresfix);
@@ -103,7 +101,6 @@ public class ModFixConfig {
 		config.set("ExpFix.FurnaceIds",new ArrayList<String>(furnSlotIDs));
 		config.set("MinecartPortalFix.enable", enableMinecartFix);
 		config.set("MinecartPortalFix.cartsIDs",new ArrayList<Short>(minecartsIDs));
-		config.set("MinecartPortalFix.restrictOpenInVehicle.enable",enableMinecartRestrictOpenInVehicle);
 		config.set("RailsFix.enable", enableRailsFix);
 		config.set("RailsFix.railsIDs",new ArrayList<Integer>(RailsIDs));
 		config.set("RP2WiresFix.enable", enableRP2wiresfix);
