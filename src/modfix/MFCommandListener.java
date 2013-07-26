@@ -161,7 +161,7 @@ public class MFCommandListener implements  CommandExecutor,Listener{
 	}
 	
 
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
 	public void onPlayerCheckEntityID(PlayerInteractEntityEvent e)
 	{
 		Player pl = e.getPlayer();
@@ -174,7 +174,7 @@ public class MFCommandListener implements  CommandExecutor,Listener{
 	}
 	
 
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
 	public void onPlayerCheckBlockID(PlayerInteractEvent e)
 	{
 		if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) {return;}
