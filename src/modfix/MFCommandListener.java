@@ -132,7 +132,7 @@ public class MFCommandListener implements  CommandExecutor,Listener{
 		}
 	}
 	
-	public void displayBlockInfo(CommandSender sender)
+	private void displayBlockInfo(CommandSender sender)
 	{
 		if (sender instanceof Player)
 		{
@@ -146,7 +146,7 @@ public class MFCommandListener implements  CommandExecutor,Listener{
 		}
 	}
 	
-	public void displayEntityInfo(CommandSender sender)
+	private void displayEntityInfo(CommandSender sender)
 	{
 		if (sender instanceof Player)
 		{
