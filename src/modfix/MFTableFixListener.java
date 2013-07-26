@@ -160,12 +160,15 @@ public class MFTableFixListener implements Listener {
 					//we must remove all drop near block to avoid this
 					if (b.getTypeId() != (matreference.get(b)))
 					{
-						deleteDropNearBlock(b);
+						if (config.BrkTablesIDs.contains(Utils.getIDstring(b)))
+						{
+							deleteDropNearBlock(b);
+						}
+						//remove block from hashmaps
+						matreference.remove(b);
+						backreference.remove(protectblocks.get(b));
+						protectblocks.remove(b);
 					}
-					//remove block from hashmaps
-					matreference.remove(b);
-					backreference.remove(protectblocks.get(b));
-					protectblocks.remove(b);
 				}
 			}
 		},0,1);
