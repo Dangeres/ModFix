@@ -61,14 +61,14 @@ public class MFFreecamInventoryOpenFix implements Listener {
 		{
 			public void run()
 			{	
-				for (Block b : new HashSet<Block>(openedinvs.keySet()))
+				for (Block b : new HashSet<Block>(matreference.keySet()))
 				{
 					if (b.getTypeId() != (matreference.get(b)))
 					{
 						for (String p : openedinvs.get(b))
 						{
-							Bukkit.getPlayerExact(p).closeInventory();
 							backreference.remove(p);
+							Bukkit.getPlayerExact(p).closeInventory();
 						}
 						openedinvs.remove(b);
 						matreference.remove(b);
