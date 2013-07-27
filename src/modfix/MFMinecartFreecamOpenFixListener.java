@@ -60,6 +60,7 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 							if (!ent.isValid() || !ent.getWorld().equals(pl.getWorld()) || ent.getLocation().distanceSquared(pl.getLocation()) > 36)
 							{
 								e.setCancelled(true);
+								playersopenedminecart.remove(pl.getName());
 								e.getPlayer().closeInventory();
 							}
 						}
