@@ -34,7 +34,7 @@ public class MFFreecamInventoryOpenFix implements Listener {
 	private HashMap<String,Block> backreference = new HashMap<String,Block>();
 	private HashMap<Block,Integer> matreference = new HashMap<Block,Integer>();
 	
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedBlockInventory(PlayerInteractEvent e)
 	{
 		if (!config.enableFreecamFix) {return;}
@@ -60,18 +60,21 @@ public class MFFreecamInventoryOpenFix implements Listener {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
 		{
 			public void run()
-			{	
+			{
 				for (Block b : new HashSet<Block>(matreference.keySet()))
 				{
-					if (b.getTypeId() != (matreference.get(b)))
+					if (b!=null)
 					{
-						for (String p : openedinvs.get(b))
+						if (b.getTypeId() != (matreference.get(b)))
 						{
-							backreference.remove(p);
-							Bukkit.getPlayerExact(p).closeInventory();
+							for (String p : openedinvs.get(b))
+							{
+								backreference.remove(p);
+								Bukkit.getPlayerExact(p).closeInventory();
+							}
+							openedinvs.remove(b);
+							matreference.remove(b);
 						}
-						openedinvs.remove(b);
-						matreference.remove(b);
 					}
 				}
 			}
