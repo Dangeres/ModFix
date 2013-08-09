@@ -87,19 +87,21 @@ public class MFFreecamInventoryOpenFix implements Listener {
 				  new PacketAdapter(main, ConnectionSide.CLIENT_SIDE, 
 				  ListenerPriority.HIGHEST, Packets.Client.CLOSE_WINDOW) {
 					@Override
-				    public void onPacketReceiving(PacketEvent e) {
-			    	String pl = e.getPlayer().getName();
-			    	if (backreference.containsKey(pl))
-			    	{
-			    		openedinvs.get(backreference.get(pl)).remove(pl);
-			    		if (openedinvs.get(backreference.get(pl)).size() == 0) {
-			    			openedinvs.remove(backreference.get(pl));
-			    		}
-			    		matreference.remove(backreference.get(pl));
-			    		backreference.remove(pl);
-			    	}
-				    	
-				    }
+				    public void onPacketReceiving(final PacketEvent e) {
+						Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
+							public void run() {
+								String pl = e.getPlayer().getName();
+								if (backreference.containsKey(pl)) {
+									openedinvs.get(backreference.get(pl)).remove(pl);
+									if (openedinvs.get(backreference.get(pl)).size() == 0) {
+										openedinvs.remove(backreference.get(pl));
+									}
+									matreference.remove(backreference.get(pl));
+									backreference.remove(pl);
+								}
+							}
+						});
+					}
 				});
 	}
 	
