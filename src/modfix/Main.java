@@ -43,6 +43,7 @@ public class Main extends JavaPlugin {
 	private MFRailsFixListener rfl;	
 	private MFRP2FixListener rp2l;
 	private MFFreecamInventoryOpenFix fciol;
+	private MFHopperMinecartFix hpl;
 	
 	public ProtocolManager protocolManager = null;
 	private boolean enableself = true;
@@ -91,10 +92,15 @@ public class Main extends JavaPlugin {
 			//init rails bugfix listener
 			rfl = new MFRailsFixListener(this,config);
 			getServer().getPluginManager().registerEvents(rfl, this);
+			//init rp2 wires fix listener
 			rp2l = new MFRP2FixListener(this,config);
 			getServer().getPluginManager().registerEvents(rp2l, this);
+			//init freecam fix listener
 			fciol = new MFFreecamInventoryOpenFix(this,config);
 			getServer().getPluginManager().registerEvents(fciol, this);
+			//init hopperminecart fix listener
+			hpl = new MFHopperMinecartFix(this,config);
+			getServer().getPluginManager().registerEvents(hpl, this);
 		}
 	}
 	
@@ -112,6 +118,7 @@ public class Main extends JavaPlugin {
 		rfl = null;
 		rp2l = null;
 		fciol = null;
+		hpl = null;
 		protocolManager.removePacketListeners(this);
 		protocolManager = null;
 		}

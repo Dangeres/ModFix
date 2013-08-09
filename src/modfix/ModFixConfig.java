@@ -55,6 +55,8 @@ public class ModFixConfig {
 	protected boolean enableFreecamFix = true;
 	protected HashSet<String> freecamBlockIDs = new HashSet<String>();
 	protected boolean enablefreecamzeroitemscheck = true;
+	protected boolean enablehopperminecartfix = true;
+	protected short hopperminecartid = 46;
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
