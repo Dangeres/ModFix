@@ -54,6 +54,7 @@ public class ModFixConfig {
 	protected HashSet<Integer> RP2WiresIDs = new HashSet<Integer>();
 	protected boolean enableFreecamFix = true;
 	protected HashSet<String> freecamBlockIDs = new HashSet<String>();
+	protected boolean enablefreecamzeroitemscheck = true;
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
@@ -79,6 +80,7 @@ public class ModFixConfig {
 		RP2WiresIDs = new HashSet<Integer>(config.getIntegerList("RP2WiresFix.wiresIDs"));
 		enableFreecamFix = config.getBoolean("FreeCamInvFix.enable",enableFreecamFix);
 		freecamBlockIDs = new HashSet<String>(config.getStringList("FreeCamInvFix.checkBlockIDs"));
+		enablefreecamzeroitemscheck = config.getBoolean("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);
 				
 		saveConfig();
 	}
@@ -107,6 +109,7 @@ public class ModFixConfig {
 		config.set("RP2WiresFix.wiresIDs",new ArrayList<Integer>(RP2WiresIDs));
 		config.set("FreeCamInvFix.enable",enableFreecamFix);
 		config.set("FreeCamInvFix.checkBlockIDs",new ArrayList<String>(freecamBlockIDs));
+		config.set("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);
 		try {
 			config.save(new File("plugins/ModFix/config.yml"));
 		} catch (IOException e) {

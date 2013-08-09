@@ -5,11 +5,13 @@ import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.Packets;
 import com.comphenix.protocol.events.ConnectionSide;
@@ -28,11 +30,13 @@ public class MFFreecamInventoryOpenFix implements Listener {
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
 		initBlockCheck();
+		initInvCheck();
 	}
 	
 	private HashMap<Block,HashSet<String>> openedinvs = new HashMap<Block,HashSet<String>>();
 	private HashMap<String,Block> backreference = new HashMap<String,Block>();
 	private HashMap<Block,Integer> matreference = new HashMap<Block,Integer>();
+	
 	
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedBlockInventory(PlayerInteractEvent e)
@@ -133,5 +137,31 @@ public class MFFreecamInventoryOpenFix implements Listener {
 				    }
 				});
 	}
+	
+	
+	
+	//additional check for 0-amount items
+	public void initInvCheck()
+	{
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
+		{
+			public void run()
+			{
+				if (!config.enablefreecamzeroitemscheck) {return;}
+				for (Player p : Bukkit.getOnlinePlayers())
+				{
+					//hotbar slots
+					for(int i = 0; i < 9; i++) {
+						ItemStack item = p.getInventory().getItem(i);
+						if (item != null && item.getAmount() == 0)
+						{
+							p.getInventory().setItem(i, null);
+						}
+					}
+				}
+			}
+		},0,1);
+	}
+	
 	
 }
