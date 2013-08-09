@@ -83,6 +83,8 @@ public class ModFixConfig {
 		enableFreecamFix = config.getBoolean("FreeCamInvFix.enable",enableFreecamFix);
 		freecamBlockIDs = new HashSet<String>(config.getStringList("FreeCamInvFix.checkBlockIDs"));
 		enablefreecamzeroitemscheck = config.getBoolean("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);
+		enablehopperminecartfix = config.getBoolean("HopperMinecartFix.enabled",enablehopperminecartfix);
+		hopperminecartid = (short) config.getInt("HopperMinecartFix.HopperMinecartID",hopperminecartid);
 				
 		saveConfig();
 	}
@@ -112,6 +114,8 @@ public class ModFixConfig {
 		config.set("FreeCamInvFix.enable",enableFreecamFix);
 		config.set("FreeCamInvFix.checkBlockIDs",new ArrayList<String>(freecamBlockIDs));
 		config.set("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);
+		config.set("HopperMinecartFix.enabled",enablehopperminecartfix);
+		config.set("HopperMinecartFix.HopperMinecartID",hopperminecartid);
 		try {
 			config.save(new File("plugins/ModFix/config.yml"));
 		} catch (IOException e) {
