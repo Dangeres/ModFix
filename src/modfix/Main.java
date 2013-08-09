@@ -46,24 +46,21 @@ public class Main extends JavaPlugin {
 	private MFHopperMinecartFix hpl;
 	
 	public ProtocolManager protocolManager = null;
-	private boolean enableself = true;
-	@Override
-	public void onLoad() {
-		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null)
-		{
-			enableself = false;
-			log.severe("[ModFix] ProtolLib is not installed, install it first");
-			log.severe("[ModFix] Shutting down server");
-			Bukkit.shutdown();
-		}
-		else {
-	    protocolManager = ProtocolLibrary.getProtocolManager();
-		}
-	}
 	
 	@Override
 	public void onEnable() {
-		if (enableself) {
+		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null)
+		{
+			log.severe("[ModFix] ProtolLib is not installed, install it first");
+			log.severe("[ModFix] Shutting down server");
+			Bukkit.shutdown();
+			return;
+		}
+		else
+		{
+		    protocolManager = ProtocolLibrary.getProtocolManager();
+		}
+		
 			//init config
 			config = new ModFixConfig(this);
 			config.loadConfig();
@@ -101,26 +98,25 @@ public class Main extends JavaPlugin {
 			//init hopperminecart fix listener
 			hpl = new MFHopperMinecartFix(this,config);
 			getServer().getPluginManager().registerEvents(hpl, this);
-		}
 	}
 	
 	@Override
 	public void onDisable() {
-		if (enableself) {
 		//null variables for folks reloading plugins
-		config.saveConfig();
-		config = null;
-		commandl = null;
-		HandlerList.unregisterAll(this);
-		tablel = null;
-		villagerl = null;
-		mpl = null;
-		rfl = null;
-		rp2l = null;
-		fciol = null;
-		hpl = null;
-		protocolManager.removePacketListeners(this);
-		protocolManager = null;
+		if (protocolManager != null)
+		{
+			config = null;
+			commandl = null;
+			HandlerList.unregisterAll(this);
+			tablel = null;
+			villagerl = null;
+			mpl = null;
+			rfl = null;
+			rp2l = null;
+			fciol = null;
+			hpl = null;
+			protocolManager.removePacketListeners(this);
+			protocolManager = null;
 		}
 	}
 	
