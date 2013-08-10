@@ -17,6 +17,8 @@
 
 package modfix;
 
+import java.util.Iterator;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -52,8 +54,21 @@ public class MFBagFixListener implements Listener {
 			{
 				if (p.getItemInHand().getTypeId() == config.CropanalyzerID)
 				{
-					event.getDrops().remove(p.getItemInHand());
-					event.getDrops().add(new ItemStack(config.CropanalyzerID));
+					int count = 0;
+					Iterator<ItemStack> it = event.getDrops().iterator();
+					while (it.hasNext())
+					{
+						ItemStack i = it.next();
+						if (i.getTypeId() == config.CropanalyzerID)
+						{
+							it.remove();
+							count++;
+						}
+					}
+					for (int i=0; i<count; i++)
+					{
+						event.getDrops().add(new ItemStack(config.CropanalyzerID));
+					}
 				}
 			}
 		}
