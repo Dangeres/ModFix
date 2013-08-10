@@ -51,7 +51,7 @@ public class ModFixConfig {
 	protected boolean enableRailsFix = true;
 	protected HashSet<Integer> RailsIDs = new HashSet<Integer>();
 	protected boolean enableRP2wiresfix = true;
-	protected HashSet<Integer> RP2WiresIDs = new HashSet<Integer>();
+	protected HashSet<String> RP2WiresIDs = new HashSet<String>();
 	protected boolean enableFreecamFix = true;
 	protected HashSet<String> freecamBlockIDs = new HashSet<String>();
 	protected boolean enablefreecamzeroitemscheck = true;
@@ -79,7 +79,7 @@ public class ModFixConfig {
 		enableRailsFix = config.getBoolean("RailsFix.enable", enableRailsFix);
 		RailsIDs = new HashSet<Integer>(config.getIntegerList("RailsFix.railsIDs"));
 		enableRP2wiresfix = config.getBoolean("RP2WiresFix.enable", enableRP2wiresfix);
-		RP2WiresIDs = new HashSet<Integer>(config.getIntegerList("RP2WiresFix.wiresIDs"));
+		RP2WiresIDs = new HashSet<String>(config.getStringList("RP2WiresFix.wiresIDs"));
 		enableFreecamFix = config.getBoolean("FreeCamInvFix.enable",enableFreecamFix);
 		freecamBlockIDs = new HashSet<String>(config.getStringList("FreeCamInvFix.checkBlockIDs"));
 		enablefreecamzeroitemscheck = config.getBoolean("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);
@@ -110,7 +110,7 @@ public class ModFixConfig {
 		config.set("RailsFix.enable", enableRailsFix);
 		config.set("RailsFix.railsIDs",new ArrayList<Integer>(RailsIDs));
 		config.set("RP2WiresFix.enable", enableRP2wiresfix);
-		config.set("RP2WiresFix.wiresIDs",new ArrayList<Integer>(RP2WiresIDs));
+		config.set("RP2WiresFix.wiresIDs",new ArrayList<String>(RP2WiresIDs));
 		config.set("FreeCamInvFix.enable",enableFreecamFix);
 		config.set("FreeCamInvFix.checkBlockIDs",new ArrayList<String>(freecamBlockIDs));
 		config.set("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);

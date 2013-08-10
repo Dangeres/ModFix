@@ -54,15 +54,17 @@ public class MFRP2FixListener implements Listener {
 	
 	private boolean isRP2WiresNear(Block b)
 	{	
-		if (
-			config.RP2WiresIDs.contains(b.getRelative(BlockFace.DOWN,1).getTypeId()) || config.RP2WiresIDs.contains(b.getRelative(BlockFace.UP,1).getTypeId())
-			|| config.RP2WiresIDs.contains(b.getRelative(BlockFace.NORTH,1).getTypeId()) || config.RP2WiresIDs.contains(b.getRelative(BlockFace.SOUTH,1).getTypeId())
-			|| config.RP2WiresIDs.contains(b.getRelative(BlockFace.WEST,1).getTypeId()) || config.RP2WiresIDs.contains(b.getRelative(BlockFace.EAST,1).getTypeId())
-		)
-		{
-			return true;
-		}
-		return false;
+		return 
+				isRP2WiresContactsBlockFace(BlockFace.EAST,b) || isRP2WiresContactsBlockFace(BlockFace.WEST,b) ||
+				isRP2WiresContactsBlockFace(BlockFace.NORTH,b) || isRP2WiresContactsBlockFace(BlockFace.SOUTH,b) ||
+				isRP2WiresContactsBlockFace(BlockFace.UP,b) || isRP2WiresContactsBlockFace(BlockFace.DOWN,b)
+		;
+
+	}
+	
+	private boolean isRP2WiresContactsBlockFace(BlockFace bf, Block b)
+	{
+		return (config.RP2WiresIDs.contains(Utils.getIDstring(b.getRelative(bf,1))));
 	}
 
 }
