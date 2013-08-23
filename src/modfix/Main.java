@@ -44,6 +44,7 @@ public class Main extends JavaPlugin {
 	private MFRP2FixListener rp2l;
 	private MFFreecamInventoryOpenFix fciol;
 	private MFHopperMinecartFix hpl;
+	private MFBagFrameInsertFixListener bfil;
 	
 	public ProtocolManager protocolManager = null;
 	
@@ -98,6 +99,9 @@ public class Main extends JavaPlugin {
 			//init hopperminecart fix listener
 			hpl = new MFHopperMinecartFix(this,config);
 			getServer().getPluginManager().registerEvents(hpl, this);
+			//init bag insert into frame fix listener
+			bfil = new MFBagFrameInsertFixListener(this,config);
+			getServer().getPluginManager().registerEvents(bfil, this);
 	}
 	
 	@Override
@@ -115,6 +119,7 @@ public class Main extends JavaPlugin {
 			rp2l = null;
 			fciol = null;
 			hpl = null;
+			bfil = null;
 			protocolManager.removePacketListeners(this);
 			protocolManager = null;
 		}
