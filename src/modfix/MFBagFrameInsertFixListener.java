@@ -21,10 +21,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class MFBagFrameInsertFixListener implements Listener {
 
+	@SuppressWarnings("unused")
 	private Main main;
 	private ModFixConfig config;
 
@@ -47,5 +49,20 @@ public class MFBagFrameInsertFixListener implements Listener {
 			}
 		}
 	}
+	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onPlayerClickedFrame(final PlayerInteractEntityEvent e)
+	{
+		if (!config.enableBagFrameInsertfix) {return;}
+		
+		if (config.bagids.contains(e.getPlayer().getItemInHand().getTypeId()))
+		{
+			if (e.getRightClicked().getType().getTypeId() == config.frameentity)
+			{
+				e.setCancelled(true);
+			}
+		}
+	}
+	
 	
 }

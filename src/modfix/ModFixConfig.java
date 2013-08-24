@@ -60,6 +60,7 @@ public class ModFixConfig {
 	protected boolean enableBagFrameInsertfix = true;
 	protected HashSet<Integer> bagids = new HashSet<Integer>();
 	protected HashSet<String> frameids = new HashSet<String>();
+	protected short frameentity = 18;
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
@@ -90,7 +91,8 @@ public class ModFixConfig {
 		hopperminecartid = (short) config.getInt("HopperMinecartFix.HopperMinecartID",hopperminecartid);
 		enableBagFrameInsertfix = config.getBoolean("BagFrameInsertFix.enabled",enableBagFrameInsertfix);
 		bagids = new HashSet<Integer>(config.getIntegerList("BagFrameInsertFix.bagIDs"));
-		frameids = new HashSet<String>(config.getStringList("BagFrameInsertFix.frameIDs"));
+		frameentity = (short) config.getInt("BagFrameInsertFix.frameentity");
+		frameids = new HashSet<String>(config.getStringList("BagFrameInsertFix.gregIDs"));
 				
 		saveConfig();
 	}
@@ -124,7 +126,8 @@ public class ModFixConfig {
 		config.set("HopperMinecartFix.HopperMinecartID",hopperminecartid);
 		config.set("BagFrameInsertFix.enabled",enableBagFrameInsertfix);
 		config.set("BagFrameInsertFix.bagIDs",new ArrayList<Integer>(bagids));
-		config.set("BagFrameInsertFix.frameIDs",new ArrayList<String>(frameids));
+		config.set("BagFrameInsertFix.frameentity",frameentity);
+		config.set("BagFrameInsertFix.gregIDs",new ArrayList<String>(frameids));
 		
 		try {
 			config.save(new File("plugins/ModFix/config.yml"));
