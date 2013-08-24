@@ -54,7 +54,6 @@ public class MFBagFixListener implements Listener {
 			{
 				if (p.getItemInHand().getTypeId() == config.CropanalyzerID)
 				{
-					int count = 0;
 					Iterator<ItemStack> it = event.getDrops().iterator();
 					while (it.hasNext())
 					{
@@ -62,12 +61,7 @@ public class MFBagFixListener implements Listener {
 						if (i.getTypeId() == config.CropanalyzerID)
 						{
 							it.remove();
-							count++;
 						}
-					}
-					for (int i=0; i<count; i++)
-					{
-						event.getDrops().add(new ItemStack(config.CropanalyzerID));
 					}
 				}
 			}
