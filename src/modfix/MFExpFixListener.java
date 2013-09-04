@@ -89,7 +89,6 @@ public class MFExpFixListener implements Listener {
 			if (item instanceof ExperienceOrb)
 			{
 				item.remove();
-				System.out.println("removing orbs");
 			}
 		}
 		fakeEntity.remove();
