@@ -47,6 +47,7 @@ public class ModFixConfig {
 	protected boolean enableExpFix = true;
 	protected HashSet<String> furnSlotIDs= new HashSet<String>();
 	protected boolean enableMinecartFix = true;
+	protected boolean enableExpFixExtendedCheck = true;
 	protected HashSet<Short> minecartsIDs = new HashSet<Short>();
 	protected boolean enableRailsFix = true;
 	protected HashSet<Integer> RailsIDs = new HashSet<Integer>();
@@ -78,6 +79,7 @@ public class ModFixConfig {
 		enableTablesFixExtendedCheck = config.getBoolean("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
 		enableExpFix = config.getBoolean("ExpFix.enable",enableExpFix);
 		furnSlotIDs = new HashSet<String>(config.getStringList("ExpFix.FurnaceIds"));
+		enableExpFixExtendedCheck = config.getBoolean("ExpFix.ExtendedCheck.enable",enableExpFixExtendedCheck);
 		enableMinecartFix = config.getBoolean("MinecartPortalFix.enable", enableMinecartFix);
 		minecartsIDs = new HashSet<Short>(config.getShortList("MinecartPortalFix.cartsIDs"));
 		enableRailsFix = config.getBoolean("RailsFix.enable", enableRailsFix);
@@ -113,6 +115,7 @@ public class ModFixConfig {
 		config.set("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
 		config.set("ExpFix.enable",enableExpFix);
 		config.set("ExpFix.FurnaceIds",new ArrayList<String>(furnSlotIDs));
+		config.set("ExpFix.ExtendedCheck.enable",enableExpFixExtendedCheck);
 		config.set("MinecartPortalFix.enable", enableMinecartFix);
 		config.set("MinecartPortalFix.cartsIDs",new ArrayList<Short>(minecartsIDs));
 		config.set("RailsFix.enable", enableRailsFix);

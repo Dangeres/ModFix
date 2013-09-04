@@ -72,7 +72,10 @@ public class MFExpFixListener implements Listener {
 				{
 					public void run()
 					{
-						deleteExperienceOrbsNearBlock(b);
+						if (config.enableExpFixExtendedCheck)
+						{
+							deleteExperienceOrbsNearBlock(b);
+						}
 					}
 				},0,1);
 				plinf.put(e.getPlayer().getName(),task);
