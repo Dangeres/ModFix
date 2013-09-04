@@ -17,8 +17,13 @@
 
 package modfix;
 
-import java.util.HashSet;
+import java.util.HashMap;
 
+import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -47,7 +52,7 @@ public class MFExpFixListener implements Listener {
 	}
 
 	
-	private HashSet<String> plinf = new HashSet<String>(); //We will add player to this list when he enters furnace and remove when he leaves
+	private HashMap<String,Integer> plinf = new HashMap<String,Integer>(); //We will add player to this list when he enters furnace and remove when he leaves
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void OnPlayerIneractFurnace(PlayerInteractEvent e)
@@ -60,21 +65,56 @@ public class MFExpFixListener implements Listener {
 			String checkid = Utils.getIDstring(e.getClickedBlock());
 			if (config.furnSlotIDs.contains(checkid))
 			{
-				plinf.add(e.getPlayer().getName());
+				final Block b = e.getClickedBlock();
+				//schedule the task that will remove all orbs nearby
+				int task =
+				Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
+				{
+					public void run()
+					{
+						deleteExperienceOrbsNearBlock(b);
+					}
+				},0,1);
+				plinf.put(e.getPlayer().getName(),task);
 			}
+		}
+	}
+	
+	private void deleteExperienceOrbsNearBlock(final Block b)
+	{
+		//remove all items
+		Entity fakeEntity = b.getWorld().spawnEntity(b.getLocation(), EntityType.ARROW);
+		for (Entity item : fakeEntity.getNearbyEntities(3, 3, 3))
+		{
+			if (item instanceof ExperienceOrb)
+			{
+				item.remove();
+				System.out.println("removing orbs");
+			}
+		}
+		fakeEntity.remove();
+	}
+	
+	//won't allow player to earn exp if he is in furnace	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onExpGain(PlayerExpChangeEvent e) 
+	{
+		if (plinf.containsKey(e.getPlayer().getName()))
+		{
+			e.setAmount(0);
 		}
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerQuit(PlayerQuitEvent e)
 	{//player can quit without closing furnace inventory, let's check it
-		plinf.remove(e.getPlayer().getName());
+		removePlayerInf(e.getPlayer().getName());
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerKick(PlayerKickEvent e)
 	{//player can be kicked without closing furnace inventory, let's check it
-		plinf.remove(e.getPlayer().getName());
+		removePlayerInf(e.getPlayer().getName());
 	}
 	
 	private void initClientCloseInventoryFixListener()
@@ -84,7 +124,7 @@ public class MFExpFixListener implements Listener {
 				  ListenerPriority.HIGHEST, Packets.Client.CLOSE_WINDOW) {
 					@Override
 				    public void onPacketReceiving(PacketEvent e) {
-						plinf.remove(e.getPlayer().getName());
+						removePlayerInf(e.getPlayer().getName());
 				    }
 				});
 	}
@@ -97,20 +137,18 @@ public class MFExpFixListener implements Listener {
 				  ListenerPriority.HIGHEST, Packets.Server.CLOSE_WINDOW) {
 					@Override
 				    public void onPacketSending(PacketEvent e) {
-						plinf.remove(e.getPlayer().getName());
+						removePlayerInf(e.getPlayer().getName());
 				    }
 				});
 	}
 	
-    //won't allow player to earn exp if he is in furnace	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onExpGain(PlayerExpChangeEvent e)
+	private void removePlayerInf(String pName)
 	{
-		if (!config.enableExpFix) {return;}
-		if (plinf.contains(e.getPlayer().getName()))
+		if (plinf.containsKey(pName))
 		{
-			e.setAmount(0);
+			Bukkit.getScheduler().cancelTask(plinf.get(pName));
+			plinf.remove(pName);
 		}
-	}
+	}	
 	
 }
